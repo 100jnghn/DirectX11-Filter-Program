@@ -280,6 +280,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 
 	// ----- Filter Mode에 따른 RTT 변화 ----- //
+	// mode1 -> Ice Filter
 	if (m_filterMode == 1) {
 		result = RenderSceneToTextureIce(cubePosX);
 		if (!result)
@@ -287,6 +288,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 			return false;
 		}
 	}
+	// mode2 -> Fire Filter
 	else if (m_filterMode == 2) {
 		
 	}
