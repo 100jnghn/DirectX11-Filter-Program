@@ -18,7 +18,6 @@ ApplicationClass::ApplicationClass()
 
 	m_NormalMapShader = 0;
 	m_GlassShader = 0;
-	m_FireShader = 0;
 
 	m_Model = 0;
 	m_IceModel = 0;
@@ -161,41 +160,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// 모델 생성
 	m_FireModel = new ModelClass;
 
-	strcpy_s(modelFilename, "data/square.txt");			// Fire를 입힐 모델 (네모)
-	//strcpy_s(textureFilename1, "data/ice01.tga");		// IceImg
-	//strcpy_s(textureFilename2, "data/icebump01.tga");	// IceBump
-
-	result = m_FireModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/fire01.jpg", (WCHAR*)L"data/noise01.jpg", (WCHAR*)L"data/alpha01.jpg");
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
-		return false;
-	}
-
-
-
-	// Render Texture 생성
-	m_RenderTextureFire = new RenderTextureClass;
-
-	result = m_RenderTextureFire->Initialize(m_Direct3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR, 1);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the render texture object.", L"Error", MB_OK);
-		return false;
-	}
-
-
-
-	// Fire Shader 생성
-	m_FireShader = new FireShaderClass;
-
-	result = m_FireShader->Initialize(m_Direct3D->GetDevice(), hwnd);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the glass shader object.", L"Error", MB_OK);
-		return false;
-	}
-	// ------------ Ice RTT 초기화 끝 -------------- //
+	// ------------ Fire RTT 초기화 끝 -------------- //
 
 	return true;
 }
@@ -257,11 +222,6 @@ void ApplicationClass::Shutdown()
 		m_GlassShader->Shutdown();
 		delete m_GlassShader;
 		m_GlassShader = 0;
-	}
-	if (m_FireShader) {
-		m_FireShader->Shutdown();
-		delete m_FireShader;
-		m_FireShader = 0;
 	}
 
 	// Release the camera object.
@@ -335,7 +295,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 			}
 		}
 	}
-
+	// ----------------------------------- //
 
 
 	// ----- 숫자 눌러서 filter mode 변경 ----- //
@@ -380,7 +340,11 @@ bool ApplicationClass::Frame(InputClass* Input)
 	}
 	// mode2 -> Fire Filter
 	else if (m_filterMode == 2) {
-		//result = RenderSceneToTextureFire(cubePosX);
+		result = RenderSceneToTextureFire(cubePosX);
+		
+		if (!result) {
+			return false;
+		}
 	}
 	// -------------------------------------- //
 	
@@ -402,8 +366,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 }
 
 // ----- Ice RTT 함수 정의 ----- //
-bool ApplicationClass::RenderSceneToTextureIce(float cubePosX)
-{
+bool ApplicationClass::RenderSceneToTextureIce(float cubePosX) {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
 
@@ -447,6 +410,11 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX)
 	return true;
 }
 
+// ----- Fire RTT 함수 정의 ----- //
+bool ApplicationClass::RenderSceneToTextureFire(float cubePosX) {
+
+	return true;
+}
 
 bool ApplicationClass::Render(float cubePosX)
 {
@@ -510,6 +478,10 @@ bool ApplicationClass::Render(float cubePosX)
 		{
 			return false;
 		}
+	}
+	// Fire 모델 렌더
+	else if (m_filterMode == 2) {
+		
 	}
 
 	

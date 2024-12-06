@@ -51,9 +51,6 @@
     <ClCompile Include="glassshaderclass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="fireshaderclass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h">
@@ -92,17 +89,12 @@
     <ClInclude Include="glassshaderclass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="fireshaderclass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="normalVS.hlsl" />
     <FxCompile Include="normalPS.hlsl" />
     <FxCompile Include="glassVS.hlsl" />
     <FxCompile Include="glassPS.hlsl" />
-    <FxCompile Include="firePS.hlsl" />
-    <FxCompile Include="fireVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="DirectXTK.lib" />
@@ -124,15 +116,6 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="data\icebump01.jpg">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="data\alpha01.jpg">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="data\fire01.jpg">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="data\noise01.jpg">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

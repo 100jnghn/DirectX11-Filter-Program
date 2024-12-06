@@ -130,7 +130,6 @@
     <ClCompile Include="applicationclass.cpp" />
     <ClCompile Include="cameraclass.cpp" />
     <ClCompile Include="d3dclass.cpp" />
-    <ClCompile Include="fireshaderclass.cpp" />
     <ClCompile Include="glassshaderclass.cpp" />
     <ClCompile Include="inputclass.cpp" />
     <ClCompile Include="lightclass.cpp" />
@@ -145,7 +144,6 @@
     <ClInclude Include="applicationclass.h" />
     <ClInclude Include="cameraclass.h" />
     <ClInclude Include="d3dclass.h" />
-    <ClInclude Include="fireshaderclass.h" />
     <ClInclude Include="glassshaderclass.h" />
     <ClInclude Include="inputclass.h" />
     <ClInclude Include="lightclass.h" />
@@ -157,14 +155,6 @@
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="firePS.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">FirePixelShader</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="fireVS.hlsl">
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">FireVertexShader</EntryPointName>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-    </FxCompile>
     <FxCompile Include="glassPS.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GlassPixelShader</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -193,13 +183,10 @@
     <Library Include="DirectXTK.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="data\alpha01.jpg" />
     <Image Include="data\block.jpg" />
     <Image Include="data\blockNormal.jpg" />
-    <Image Include="data\fire01.jpg" />
     <Image Include="data\ice01.jpg" />
     <Image Include="data\icebump01.jpg" />
-    <Image Include="data\noise01.jpg" />
     <Image Include="data\normal01.tga" />
     <Image Include="data\stone01.tga" />
   </ItemGroup>
