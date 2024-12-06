@@ -251,6 +251,25 @@ bool InputClass::IsRightArrowPressed() {
 	return false;
 }
 
+// Up 방향키
+bool InputClass::IsUpArrowPressed() {
+	if (m_keyboardState[DIK_UP]) {
+		return true;
+	}
+
+	return false;
+}
+
+// Down 방향키
+bool InputClass::IsDownArrowPressed() {
+	if (m_keyboardState[DIK_DOWN]) {
+		return true;
+	}
+
+	return false;
+}
+
+
 // 숫자1
 bool InputClass::IsNum1Pressed() {
 	if (m_keyboardState[DIK_1]) {

@@ -44,6 +44,10 @@ public:
 	bool IsLeftArrowPressed();
 	bool IsRightArrowPressed();
 
+	// 방향키 상,하
+	bool IsUpArrowPressed();
+	bool IsDownArrowPressed();
+
 	// 숫자 1, 2, 0
 	bool IsNum1Pressed();
 	bool IsNum2Pressed();

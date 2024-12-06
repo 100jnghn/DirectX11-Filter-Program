@@ -9,6 +9,8 @@ ApplicationClass::ApplicationClass()
 	// 시작 시 필터 모드 0으로 초기화
 	m_filterMode = 0;
 
+	m_refractionScale = 0.02f;
+
 
 
 	m_Direct3D = 0;
@@ -230,7 +232,8 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 
 
-	// Check if the user pressed escape and wants to exit the application.
+	// ---------- 사용자 Input 관리 ---------- //
+
 	if(Input->IsEscapePressed())
 	{
 		return false;
@@ -245,6 +248,30 @@ bool ApplicationClass::Frame(InputClass* Input)
 		cubePosX += 0.1f;
 	}
 	// ------------------------------ //
+
+	// ----- refractionScale 조정 ----- //
+	if (Input->IsUpArrowPressed()) {
+		if (m_filterMode == 1) {
+			m_refractionScale += 0.01f;
+
+			// max refraction scale: 0.3f
+			if (m_refractionScale >= 0.3f) {
+				m_refractionScale = 0.3f;
+			}
+		}
+		
+	}
+
+	if (Input->IsDownArrowPressed()) {
+		if (m_filterMode == 1) {
+			m_refractionScale -= 0.01f;
+
+			// min refraction scale: 0.0f
+			if (m_refractionScale <= 0.0f) {
+				m_refractionScale = 0.0f;
+			}
+		}
+	}
 
 
 
@@ -264,7 +291,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 		m_filterMode = 0;
 	}
 
-
+	// ----------- 사용자 Input 관리 끝 ----------- //
 
 
 
@@ -362,7 +389,7 @@ bool ApplicationClass::Render(float cubePosX)
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
 
-	float refractionScale = 0.02f;
+	//float refractionScale = 0.02f;
 
 
 	// Clear the buffers to begin the scene.
@@ -402,6 +429,10 @@ bool ApplicationClass::Render(float cubePosX)
 	}
 
 
+
+	// ----- Filter Mode에 따른 Render 변화 ----- //
+
+	// Ice 모델 렌더
 	if (m_filterMode == 1) {
 		// ----- Ice Model Render ----- //
 		worldMatrix = XMMatrixScaling(3.0f, 3.0f, 3.0f);
@@ -410,7 +441,7 @@ bool ApplicationClass::Render(float cubePosX)
 		m_IceModel->Render(m_Direct3D->GetDeviceContext());
 
 		result = m_GlassShader->Render(m_Direct3D->GetDeviceContext(), m_IceModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_IceModel->GetTexture(0),
-			m_IceModel->GetTexture(1), m_RenderTextureIce->GetShaderResourceView(), refractionScale);
+			m_IceModel->GetTexture(1), m_RenderTextureIce->GetShaderResourceView(), m_refractionScale);
 		if (!result)
 		{
 			return false;
