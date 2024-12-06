@@ -19,6 +19,7 @@ ApplicationClass::ApplicationClass()
 	m_Model = 0;
 	m_RenderTextureIce = 0;
 	m_IceModel = 0;
+	m_FireModel = 0;
 	m_Light = 0;
 	m_LightPhong = 0;
 }
@@ -145,8 +146,19 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 	// ---------------------------- //
 	
+	// ----- Fire RTT ÃÊ±âÈ­ ----- //
+	m_FireModel = new ModelClass;
 
+	strcpy_s(modelFilename, "data/square.txt");			// Fire¸¦ ÀÔÈú ¸ðµ¨ (³×¸ð)
+	//strcpy_s(textureFilename1, "data/ice01.tga");		// IceImg
+	//strcpy_s(textureFilename2, "data/icebump01.tga");	// IceBump
 
+	result = m_FireModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/fire01.tga", (WCHAR*)L"data/noise01.jpg");
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
+		return false;
+	}
 
 	return true;
 }
@@ -191,6 +203,12 @@ void ApplicationClass::Shutdown()
 		m_IceModel->Shutdown();
 		delete m_IceModel;
 		m_IceModel = 0;
+	}
+	if (m_FireModel)
+	{
+		m_FireModel->Shutdown();
+		delete m_FireModel;
+		m_FireModel = 0;
 	}
 
 	// Release the normal map shader object.
@@ -317,7 +335,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 	}
 	// mode2 -> Fire Filter
 	else if (m_filterMode == 2) {
-		
+		//result = RenderSceneToTextureFire(cubePosX);
 	}
 	// -------------------------------------- //
 	
@@ -378,6 +396,7 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX)
 	m_Direct3D->ResetViewport();
 
 	
+
 
 
 	return true;

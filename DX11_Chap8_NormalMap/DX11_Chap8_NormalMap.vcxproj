@@ -183,10 +183,13 @@
     <Library Include="DirectXTK.lib" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="data\alpha01.jpg" />
     <Image Include="data\block.jpg" />
     <Image Include="data\blockNormal.jpg" />
+    <Image Include="data\fire01.jpg" />
     <Image Include="data\ice01.jpg" />
     <Image Include="data\icebump01.jpg" />
+    <Image Include="data\noise01.jpg" />
     <Image Include="data\normal01.tga" />
     <Image Include="data\stone01.tga" />
   </ItemGroup>

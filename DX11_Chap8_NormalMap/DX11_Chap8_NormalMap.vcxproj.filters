@@ -118,6 +118,15 @@
     <Image Include="data\icebump01.jpg">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="data\alpha01.jpg">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="data\fire01.jpg">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="data\noise01.jpg">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\cube.txt" />

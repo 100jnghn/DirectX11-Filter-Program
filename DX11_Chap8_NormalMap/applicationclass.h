@@ -56,6 +56,7 @@ private:
 	
 	ModelClass* m_Model;
 	ModelClass* m_IceModel;
+	ModelClass* m_FireModel;
 
 	RenderTextureClass* m_RenderTextureIce;
 
