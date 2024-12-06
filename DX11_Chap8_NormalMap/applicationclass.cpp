@@ -15,11 +15,18 @@ ApplicationClass::ApplicationClass()
 
 	m_Direct3D = 0;
 	m_Camera = 0;
+
 	m_NormalMapShader = 0;
+	m_GlassShader = 0;
+	m_FireShader = 0;
+
 	m_Model = 0;
-	m_RenderTextureIce = 0;
 	m_IceModel = 0;
 	m_FireModel = 0;
+
+	m_RenderTextureIce = 0;
+	m_RenderTextureFire = 0;
+	
 	m_Light = 0;
 	m_LightPhong = 0;
 }
@@ -196,17 +203,15 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 void ApplicationClass::Shutdown()
 {
-	if (m_GlassShader)
-	{
-		m_GlassShader->Shutdown();
-		delete m_GlassShader;
-		m_GlassShader = 0;
-	}
-	if (m_RenderTextureIce)
-	{
+	if (m_RenderTextureIce)	{
 		m_RenderTextureIce->Shutdown();
 		delete m_RenderTextureIce;
 		m_RenderTextureIce = 0;
+	}
+	if (m_RenderTextureFire) {
+		m_RenderTextureFire->Shutdown();
+		delete m_RenderTextureFire;
+		m_RenderTextureFire = 0;
 	}
 
 	// Release the light object.
@@ -247,6 +252,16 @@ void ApplicationClass::Shutdown()
 		m_NormalMapShader->Shutdown();
 		delete m_NormalMapShader;
 		m_NormalMapShader = 0;
+	}
+	if (m_GlassShader) {
+		m_GlassShader->Shutdown();
+		delete m_GlassShader;
+		m_GlassShader = 0;
+	}
+	if (m_FireShader) {
+		m_FireShader->Shutdown();
+		delete m_FireShader;
+		m_FireShader = 0;
 	}
 
 	// Release the camera object.
