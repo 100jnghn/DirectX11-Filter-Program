@@ -77,7 +77,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
     // Create and initialize the model object.
     m_Model = new ModelClass;
 
-    result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/block.jpg", (WCHAR*)L"data/blockNormal.jpg");
+    result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/block.jpg", (WCHAR*)L"data/blockNormal.jpg", NULL);
     if(!result)
     {
         return false;
@@ -114,7 +114,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// 모델 생성
 	m_IceModel = new ModelClass;
 
-	result = m_IceModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/ice01.jpg", (WCHAR*)L"data/icebump01.jpg");
+	result = m_IceModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/ice01.jpg", (WCHAR*)L"data/icebump01.jpg", NULL);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
@@ -144,21 +144,51 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the glass shader object.", L"Error", MB_OK);
 		return false;
 	}
-	// ---------------------------- //
+	// ------------ Ice RTT 초기화 끝 -------------- //
 	
+
+
+
+
 	// ----- Fire RTT 초기화 ----- //
+	// 모델 생성
 	m_FireModel = new ModelClass;
 
 	strcpy_s(modelFilename, "data/square.txt");			// Fire를 입힐 모델 (네모)
 	//strcpy_s(textureFilename1, "data/ice01.tga");		// IceImg
 	//strcpy_s(textureFilename2, "data/icebump01.tga");	// IceBump
 
-	result = m_FireModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/fire01.tga", (WCHAR*)L"data/noise01.jpg");
+	result = m_FireModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/fire01.jpg", (WCHAR*)L"data/noise01.jpg", (WCHAR*)L"data/alpha01.jpg");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
 		return false;
 	}
+
+
+
+	// Render Texture 생성
+	m_RenderTextureFire = new RenderTextureClass;
+
+	result = m_RenderTextureFire->Initialize(m_Direct3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR, 1);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the render texture object.", L"Error", MB_OK);
+		return false;
+	}
+
+
+
+	// Fire Shader 생성
+	m_FireShader = new FireShaderClass;
+
+	result = m_FireShader->Initialize(m_Direct3D->GetDevice(), hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the glass shader object.", L"Error", MB_OK);
+		return false;
+	}
+	// ------------ Ice RTT 초기화 끝 -------------- //
 
 	return true;
 }

@@ -16,6 +16,7 @@
 #include "lightclass.h"
 #include "rendertextureclass.h"
 #include "glassshaderclass.h"
+#include "fireshaderclass.h"
 
 
 /////////////
@@ -52,15 +53,17 @@ private:
 
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
+
 	NormalMapShaderClass* m_NormalMapShader;
-	
+	GlassShaderClass* m_GlassShader;
+	FireShaderClass* m_FireShader;
+
 	ModelClass* m_Model;
 	ModelClass* m_IceModel;
 	ModelClass* m_FireModel;
 
 	RenderTextureClass* m_RenderTextureIce;
-
-	GlassShaderClass* m_GlassShader;
+	RenderTextureClass* m_RenderTextureFire;
 
 	LightClass* m_Light;
 	LightClass* m_LightPhong;
