@@ -65,7 +65,6 @@ private:
 	ModelClass* m_FireModel;
 
 	RenderTextureClass* m_RenderTextureIce;
-	RenderTextureClass* m_RenderTextureFire;
 
 	LightClass* m_Light;
 	LightClass* m_LightPhong;

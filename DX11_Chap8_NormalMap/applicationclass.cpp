@@ -24,7 +24,6 @@ ApplicationClass::ApplicationClass()
 	m_FireModel = 0;
 
 	m_RenderTextureIce = 0;
-	m_RenderTextureFire = 0;
 	
 	m_Light = 0;
 	m_LightPhong = 0;
@@ -169,18 +168,6 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 
 
-	// Render Texture 생성
-	m_RenderTextureFire = new RenderTextureClass;
-
-	result = m_RenderTextureFire->Initialize(m_Direct3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR, 1);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the render texture object.", L"Error", MB_OK);
-		return false;
-	}
-
-
-
 	// shader 생성
 	m_FireShader = new FireShaderClass;
 
@@ -203,11 +190,6 @@ void ApplicationClass::Shutdown()
 		m_RenderTextureIce->Shutdown();
 		delete m_RenderTextureIce;
 		m_RenderTextureIce = 0;
-	}
-	if (m_RenderTextureFire) {
-		m_RenderTextureFire->Shutdown();
-		delete m_RenderTextureFire;
-		m_RenderTextureFire = 0;
 	}
 
 	// Release the light object.
@@ -364,6 +346,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 	// mode1 -> Ice Filter
 	if (m_filterMode == 1) {
 		result = RenderSceneToTextureIce(cubePosX);
+
 		if (!result)
 		{
 			return false;
@@ -371,11 +354,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 	}
 	// mode2 -> Fire Filter
 	else if (m_filterMode == 2) {
-		result = RenderSceneToTextureFire(cubePosX);
 		
-		if (!result) {
-			return false;
-		}
 	}
 	// -------------------------------------- //
 	
@@ -383,7 +362,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 	
 	// Render the graphics scene.
-	// 어떤 filter mode이던 모두 Render()를 수행해야 하므로(Cube Model을 나타내야 하기 때문) 조건문 수행 후 Render() 수행하는 코드로 작성
+	// 어떤 filter mode이던 모두 Render()를 수행해야 하므로(Cube Model을 나타내야 하기 때문?) 조건문 수행 후 Render() 수행하는 코드로 작성
 	result = Render(cubePosX);
 	if (!result)
 	{
@@ -421,7 +400,6 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX) {
 	
 	// Render the cube model using the texture shader.
 	m_Model->Render(m_Direct3D->GetDeviceContext());
-
 	result = m_NormalMapShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 										m_Model->GetTexture(0), m_Model->GetTexture(1),
 										m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor());
@@ -437,12 +415,6 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX) {
 	
 
 
-
-	return true;
-}
-
-// ----- Fire RTT 함수 정의 ----- //
-bool ApplicationClass::RenderSceneToTextureFire(float cubePosX) {
 
 	return true;
 }
@@ -499,7 +471,7 @@ bool ApplicationClass::Render(float cubePosX)
 	if (m_filterMode == 1) {
 		// ----- Ice Model Render ----- //
 		worldMatrix = XMMatrixScaling(3.0f, 3.0f, 3.0f);
-		worldMatrix *= XMMatrixTranslation(0.0f, 0.0f, -1.5f);
+		worldMatrix *= XMMatrixTranslation(0.0f, 0.0f, -1.1f);
 
 		m_IceModel->Render(m_Direct3D->GetDeviceContext());
 
@@ -512,7 +484,24 @@ bool ApplicationClass::Render(float cubePosX)
 	}
 	// Fire 모델 렌더
 	else if (m_filterMode == 2) {
-		
+		m_Direct3D->EnableAlphaBlending();
+		// ----- Fire Model Render ----- //
+		worldMatrix = XMMatrixScaling(3.0f, 3.0f, 3.0f);
+		worldMatrix *= XMMatrixTranslation(0.0f, 0.0f, -1.1f);
+
+		m_FireModel->Render(m_Direct3D->GetDeviceContext());
+
+		static float f = 0.0f;
+		f += 0.01f;
+
+		result = m_FireShader->Render(m_Direct3D->GetDeviceContext(), m_FireModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+								m_FireModel->GetTexture(0), m_FireModel->GetTexture(1), f);
+		if (!result)
+		{
+			return false;
+		}
+
+		m_Direct3D->DisableAlphaBlending();
 	}
 
 	
