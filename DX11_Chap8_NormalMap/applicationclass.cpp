@@ -492,7 +492,7 @@ bool ApplicationClass::Render(float cubePosX)
 		m_FireModel->Render(m_Direct3D->GetDeviceContext());
 
 		static float f = 0.0f;
-		f += 0.01f;
+		f += 0.001f;
 
 		result = m_FireShader->Render(m_Direct3D->GetDeviceContext(), m_FireModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 								m_FireModel->GetTexture(0), m_FireModel->GetTexture(1), f);
