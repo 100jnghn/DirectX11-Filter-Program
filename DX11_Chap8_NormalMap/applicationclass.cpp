@@ -159,7 +159,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// ¸ğµ¨ »ı¼º
 	m_FireModel = new ModelClass;
 
-	result = m_FireModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/flame01.jpg", (WCHAR*)L"data/flame02.jpg", NULL);
+	result = m_FireModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/flame01.jpg", (WCHAR*)L"data/flame02.jpg", (WCHAR*)L"data/flameAlpha.png");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
@@ -495,7 +495,7 @@ bool ApplicationClass::Render(float cubePosX)
 		f += 0.001f;
 
 		result = m_FireShader->Render(m_Direct3D->GetDeviceContext(), m_FireModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-								m_FireModel->GetTexture(0), m_FireModel->GetTexture(1), f);
+								m_FireModel->GetTexture(0), m_FireModel->GetTexture(1), m_FireModel->GetTexture(2), f);
 		if (!result)
 		{
 			return false;

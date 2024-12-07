@@ -8,6 +8,7 @@
 /////////////
 Texture2D shaderTexture1 : register(t0);
 Texture2D shaderTexture2 : register(t1);
+Texture2D alphaTexture : register(t2);
 SamplerState SampleType : register(s0);
 
 cbuffer TranslationBuffer
@@ -31,15 +32,28 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 FirePixelShader(PixelInputType input) : SV_TARGET
 {
-	float4 textureColor;
+	float4 textureColor1;
+    float4 textureColor2;
+    float4 alphaValue;
+    float4 color;
+    
+    input.tex.y -= textureTranslation;
+    
+    alphaValue = alphaTexture.Sample(SampleType, input.tex);
 
 	// Translate the position where we sample the pixel from.
-    input.tex.y -= textureTranslation;
+    
+    textureColor1 = shaderTexture1.Sample(SampleType, input.tex);
+    textureColor2 = shaderTexture2.Sample(SampleType, input.tex);
+    
+    
+    color = (textureColor1 * textureColor2) / 2.0f;
 
-    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-    textureColor = shaderTexture1.Sample(SampleType, input.tex) * shaderTexture2.Sample(SampleType, input.tex) / 2.0f;
-    
-    textureColor.a = 0.9f;
-    
-    return textureColor;
+    float points = alphaValue.x + alphaValue.y + alphaValue.z;
+    if (points <= 0.2)          color.a = 0.7f;
+    else if (points <= 0.4f)    color.a = 0.8f;
+    else if (points <= 0.6f)    color.a = 0.9f;
+    else                        color.a = 1.0f;
+
+    return color;
 }
