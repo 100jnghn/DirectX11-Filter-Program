@@ -160,6 +160,37 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// 葛胆 积己
 	m_FireModel = new ModelClass;
 
+	result = m_FireModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/flame01.jpg", (WCHAR*)L"data/flame02.jpg", NULL);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
+		return false;
+	}
+
+
+
+	// Render Texture 积己
+	m_RenderTextureFire = new RenderTextureClass;
+
+	result = m_RenderTextureFire->Initialize(m_Direct3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR, 1);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the render texture object.", L"Error", MB_OK);
+		return false;
+	}
+
+
+
+	// shader 积己
+	m_FireShader = new FireShaderClass;
+
+	result = m_FireShader->Initialize(m_Direct3D->GetDevice(), hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the fire shader object.", L"Error", MB_OK);
+		return false;
+	}
+
 	// ------------ Fire RTT 檬扁拳 场 -------------- //
 
 	return true;

@@ -16,6 +16,7 @@
 #include "lightclass.h"
 #include "rendertextureclass.h"
 #include "glassshaderclass.h"
+#include "fireshaderclass.h"
 
 
 
@@ -57,6 +58,7 @@ private:
 
 	NormalMapShaderClass* m_NormalMapShader;
 	GlassShaderClass* m_GlassShader;
+	FireShaderClass* m_FireShader;
 
 	ModelClass* m_Model;
 	ModelClass* m_IceModel;
