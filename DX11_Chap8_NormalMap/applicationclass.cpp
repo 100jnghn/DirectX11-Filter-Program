@@ -2,7 +2,6 @@
 // Filename: applicationclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "applicationclass.h"
-#include <random>
 
 
 
@@ -19,12 +18,15 @@ ApplicationClass::ApplicationClass()
 
 	m_NormalMapShader = 0;
 	m_GlassShader = 0;
+	m_TextureShader = 0;
 
 	m_Model = 0;
 	m_IceModel = 0;
 	m_FireModel = 0;
+	m_DisplayPlane = 0;
 
 	m_RenderTextureIce = 0;
+	m_RenderTextureOrigin = 0;
 	
 	m_Light = 0;
 	m_LightPhong = 0;
@@ -181,6 +183,42 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// ------------ Fire RTT 초기화 끝 -------------- //
 
+
+
+	// ---------- Original Renter Texture 생성 ---------- //
+	// 우상단에 필터 효과를 뺀 Original Model Render 
+	m_DisplayPlane = new DisplayPlaneClass;
+
+	result = m_DisplayPlane->Initialize(m_Direct3D->GetDevice(), 1.0f, 1.0f);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
+		return false;
+	}
+
+
+
+	m_RenderTextureOrigin = new RenderTextureClass;
+	
+	result = m_RenderTextureOrigin->Initialize(m_Direct3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR, 1);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the render texture object.", L"Error", MB_OK);
+		return false;
+	}
+
+
+
+	m_TextureShader = new TextureShaderClass;
+
+	result = m_TextureShader->Initialize(m_Direct3D->GetDevice(), hwnd);
+	if (!result)
+	{
+		return false;
+	}
+
+
+
 	return true;
 }
 
@@ -191,6 +229,12 @@ void ApplicationClass::Shutdown()
 		m_RenderTextureIce->Shutdown();
 		delete m_RenderTextureIce;
 		m_RenderTextureIce = 0;
+	}
+
+	if (m_RenderTextureOrigin) {
+		m_RenderTextureOrigin->Shutdown();
+		delete m_RenderTextureOrigin;
+		m_RenderTextureOrigin = 0;
 	}
 
 	// Release the light object.
@@ -353,17 +397,6 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 
 
-	// Update the rotation variable each frame.
-    rotation -= 0.0174532925f * 0.25f;
-    if(rotation <= 0.0f)
-    {
-        rotation += 360.0f;
-    }
-
-	// ----- 우상단 Rotation Model RTT ----- //
-
-
-
 	// ----- Filter Mode에 따른 RTT 변화 ----- //
 	// mode1 -> Ice Filter
 	if (m_filterMode == 1) {
@@ -374,10 +407,6 @@ bool ApplicationClass::Frame(InputClass* Input)
 			return false;
 		}
 	}
-	// mode2 -> Fire Filter
-	else if (m_filterMode == 2) {
-		
-	}
 	// -------------------------------------- //
 	
 	
@@ -385,12 +414,27 @@ bool ApplicationClass::Frame(InputClass* Input)
 	
 	// Render the graphics scene.
 	// 어떤 filter mode이던 모두 Render()를 수행해야 하므로(Cube Model을 나타내야 하기 때문?) 조건문 수행 후 Render() 수행하는 코드로 작성
-	result = Render(cubePosX);
-	if (!result)
+	//result = Render(cubePosX);
+	//if (!result)
+	//{
+	//	return false;
+	//}
+
+
+
+	// Update the rotation variable each frame.
+	rotation -= 0.0174532925f * 0.25f;
+	if (rotation <= 0.0f)
 	{
-		return false;
+		rotation += 360.0f;
 	}
 
+	// ----- 우상단 Rotation Model RTT ----- //
+	result = RenderSceneToTextureOrigin(rotation, cubePosX);
+
+	if (!result) {
+		return false;
+	}
 
 
 
@@ -434,11 +478,49 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX) {
 	m_Direct3D->SetBackBufferRenderTarget();
 	m_Direct3D->ResetViewport();
 
-	
+	return true;
+}
+
+bool ApplicationClass::RenderSceneToTextureOrigin(float rotation, float cubePosX) {
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	bool result;
+
+	m_RenderTextureOrigin->SetRenderTarget(m_Direct3D->GetDeviceContext());
+	m_RenderTextureOrigin->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.5f, 1.0f, 1.0f);	// 배경 색 지정
+
+	//m_Camera->SetPosition(0.0f, 0.0f, -12.0f);
+	m_Camera->Render();
+
+	m_Direct3D->GetWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_RenderTextureOrigin->GetProjectionMatrix(projectionMatrix);
 
 
+	worldMatrix = XMMatrixRotationY(rotation);
+
+
+
+	m_Model->Render(m_Direct3D->GetDeviceContext());
+	result = m_NormalMapShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+		m_Model->GetTexture(0), m_Model->GetTexture(1),
+		m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor());
+
+	if (!result)
+	{
+		return false;
+	}
+
+	m_Direct3D->SetBackBufferRenderTarget();
+	m_Direct3D->ResetViewport();
+
+	result = Render(cubePosX);
+	if (!result)
+	{
+		return false;
+	}
 
 	return true;
+
 }
 
 bool ApplicationClass::Render(float cubePosX)
@@ -484,6 +566,20 @@ bool ApplicationClass::Render(float cubePosX)
 	{
 		return false;
 	}
+
+
+	// Setup matrices - Top display plane.
+	worldMatrix = XMMatrixTranslation(-4.0f, 3.0f, 0.0f);
+
+	// Render the display plane using the texture shader and the render texture resource.
+	m_DisplayPlane->Render(m_Direct3D->GetDeviceContext());
+	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_DisplayPlane->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_RenderTextureOrigin->GetShaderResourceView());
+	if (!result)
+	{
+		return false;
+	}
+
+
 
 
 
@@ -533,7 +629,7 @@ bool ApplicationClass::Render(float cubePosX)
 		m_Direct3D->DisableAlphaBlending();
 	}
 
-	
+
 
 	// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();

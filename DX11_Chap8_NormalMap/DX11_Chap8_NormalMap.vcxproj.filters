@@ -54,6 +54,12 @@
     <ClCompile Include="fireshaderclass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="displayplaneclass.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="textureshaderclass.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h">
@@ -95,6 +101,12 @@
     <ClInclude Include="fireshaderclass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="displayplaneclass.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="textureshaderclass.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="normalVS.hlsl" />
@@ -103,6 +115,8 @@
     <FxCompile Include="glassPS.hlsl" />
     <FxCompile Include="firePS.hlsl" />
     <FxCompile Include="fireVS.hlsl" />
+    <FxCompile Include="texturePixel.hlsl" />
+    <FxCompile Include="textureVertex.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="DirectXTK.lib" />

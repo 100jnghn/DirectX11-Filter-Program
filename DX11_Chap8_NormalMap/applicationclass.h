@@ -17,6 +17,8 @@
 #include "rendertextureclass.h"
 #include "glassshaderclass.h"
 #include "fireshaderclass.h"
+#include "displayplaneclass.h"
+#include "textureshaderclass.h"
 
 
 
@@ -47,7 +49,7 @@ public:
 private:
 	bool Render(float);
 	bool RenderSceneToTextureIce(float cubePosX);
-	bool RenderSceneToTextureFire(float cubePosX);
+	bool RenderSceneToTextureOrigin(float rotation, float cubePosX);
 
 private:
 	int m_filterMode;	// 필터 모드 정보를 저장하는 변수
@@ -60,12 +62,15 @@ private:
 	NormalMapShaderClass* m_NormalMapShader;
 	GlassShaderClass* m_GlassShader;
 	FireShaderClass* m_FireShader;
+	TextureShaderClass* m_TextureShader;
 
 	ModelClass* m_Model;
 	ModelClass* m_IceModel;
 	ModelClass* m_FireModel;
+	DisplayPlaneClass* m_DisplayPlane;
 
 	RenderTextureClass* m_RenderTextureIce;
+	RenderTextureClass* m_RenderTextureOrigin;
 
 	LightClass* m_Light;
 	LightClass* m_LightPhong;
