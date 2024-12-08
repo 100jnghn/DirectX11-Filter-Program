@@ -14,6 +14,9 @@ SamplerState SampleType : register(s0);
 cbuffer TranslationBuffer
 {
     float textureTranslation;
+    float bright;
+    
+    float2 padding;
 };
 
 
@@ -39,20 +42,20 @@ float4 FirePixelShader(PixelInputType input) : SV_TARGET
     
     input.tex.y -= textureTranslation;
     
-    alphaValue = alphaTexture.Sample(SampleType, input.tex);
+    alphaValue = alphaTexture.Sample(SampleType, input.tex - textureTranslation * 0.1f);
 
-	// Translate the position where we sample the pixel from.
     
-    textureColor1 = shaderTexture1.Sample(SampleType, input.tex);
-    textureColor2 = shaderTexture2.Sample(SampleType, input.tex);
+    textureColor1 = shaderTexture1.Sample(SampleType, input.tex + textureTranslation * 0.2f);
+    textureColor2 = shaderTexture2.Sample(SampleType, input.tex - textureTranslation * 0.2f);
     
-    
-    color = (textureColor1 * textureColor2) / 2.0f;
+    // bright 값이 커지면 어두워짐   // bright 값이 작아지면 밝아짐
+    color = (textureColor1 * textureColor2) / bright;
 
     float points = alphaValue.x + alphaValue.y + alphaValue.z;
+    
     if (points <= 0.2)          color.a = 0.7f;
-    else if (points <= 0.4f)    color.a = 0.8f;
-    else if (points <= 0.6f)    color.a = 0.9f;
+    else if (points <= 0.3f)    color.a = 0.8f;
+    else if (points <= 0.5f)    color.a = 0.9f;
     else                        color.a = 1.0f;
 
     return color;

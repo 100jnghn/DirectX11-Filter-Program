@@ -195,7 +195,6 @@
     <Library Include="DirectXTK.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="data\alpha01.png" />
     <Image Include="data\block.jpg" />
     <Image Include="data\blockNormal.jpg" />
     <Image Include="data\flame01.jpg" />

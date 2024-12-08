@@ -52,6 +52,7 @@ private:
 private:
 	int m_filterMode;	// 필터 모드 정보를 저장하는 변수
 	float m_refractionScale;	// Ice 효과 refraction값
+	float m_fireBright;		// Fire 효과 밝기 값
 
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;

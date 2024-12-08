@@ -68,13 +68,13 @@ void FireShaderClass::Shutdown()
 
 
 bool FireShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture1, ID3D11ShaderResourceView* texture2, ID3D11ShaderResourceView* alphaTexture, float translation)
+	XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture1, ID3D11ShaderResourceView* texture2, ID3D11ShaderResourceView* alphaTexture, float translation, float bright)
 {
 	bool result;
 
 
 	// Set the shader parameters that it will use for rendering.
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture1, texture2, alphaTexture, translation);
+	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture1, texture2, alphaTexture, translation, bright);
 	if(!result)
 	{
 		return false;
@@ -333,7 +333,8 @@ void FireShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hw
 
 
 bool FireShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-											 XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture1, ID3D11ShaderResourceView* texture2, ID3D11ShaderResourceView* alphaTexture, float translation)
+											 XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture1, ID3D11ShaderResourceView* texture2, ID3D11ShaderResourceView* alphaTexture,
+												float translation, float bright)
 {
 	HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -388,6 +389,7 @@ bool FireShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, XM
 
 	// Copy the translation value into the texture translation constant buffer.
 	dataPtr2->translation = translation;
+	dataPtr2->bright = bright;
 
 	// Unlock the buffer.
 	deviceContext->Unmap(m_translateBuffer, 0);

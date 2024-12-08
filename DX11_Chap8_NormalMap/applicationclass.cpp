@@ -2,6 +2,8 @@
 // Filename: applicationclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "applicationclass.h"
+#include <random>
+
 
 
 ApplicationClass::ApplicationClass()
@@ -10,8 +12,7 @@ ApplicationClass::ApplicationClass()
 	m_filterMode = 0;
 
 	m_refractionScale = 0.02f;
-
-
+	m_fireBright = 1.3f;
 
 	m_Direct3D = 0;
 	m_Camera = 0;
@@ -287,6 +288,8 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 	// ----- refractionScale 조정 ----- //
 	if (Input->IsUpArrowPressed()) {
+
+		// Ice Refraction 조절
 		if (m_filterMode == 1) {
 			m_refractionScale += 0.01f;
 
@@ -295,16 +298,35 @@ bool ApplicationClass::Frame(InputClass* Input)
 				m_refractionScale = 0.3f;
 			}
 		}
-		
+		// Fire Bright 조절
+		else if (m_filterMode == 2) {
+			m_fireBright -= 0.01f;
+
+			// min bright value: 0.8f;
+			if (m_fireBright <= 0.8f) {
+				m_fireBright = 0.8f;
+			}
+		}
 	}
 
 	if (Input->IsDownArrowPressed()) {
+
+		// Ice Refraction 조절
 		if (m_filterMode == 1) {
 			m_refractionScale -= 0.01f;
 
 			// min refraction scale: 0.0f
 			if (m_refractionScale <= 0.0f) {
 				m_refractionScale = 0.0f;
+			}
+		}
+		// Fire Bright 조절
+		else if (m_filterMode == 2) {
+			m_fireBright += 0.01f;
+
+			// max bright value: 1.7f
+			if (m_fireBright >= 1.7f) {
+				m_fireBright = 1.7f;
 			}
 		}
 	}
@@ -485,17 +507,24 @@ bool ApplicationClass::Render(float cubePosX)
 	// Fire 모델 렌더
 	else if (m_filterMode == 2) {
 		m_Direct3D->EnableAlphaBlending();
+
 		// ----- Fire Model Render ----- //
 		worldMatrix = XMMatrixScaling(3.0f, 3.0f, 3.0f);
 		worldMatrix *= XMMatrixTranslation(0.0f, 0.0f, -1.1f);
 
 		m_FireModel->Render(m_Direct3D->GetDeviceContext());
 
-		static float f = 0.0f;
-		f += 0.001f;
+		// ----- Fire Filter의 Texture들 이동 값 ----- //
+		static float trans = 0.0f;
+		trans += 0.001f;
+
+		if (trans >= 1.0f) {
+			trans = 0.0f;
+		}
+		// ------------------------------------------ //
 
 		result = m_FireShader->Render(m_Direct3D->GetDeviceContext(), m_FireModel->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-								m_FireModel->GetTexture(0), m_FireModel->GetTexture(1), m_FireModel->GetTexture(2), f);
+								m_FireModel->GetTexture(0), m_FireModel->GetTexture(1), m_FireModel->GetTexture(2), trans, m_fireBright);
 		if (!result)
 		{
 			return false;
