@@ -189,7 +189,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// 우상단에 필터 효과를 뺀 Original Model Render 
 	m_DisplayPlane = new DisplayPlaneClass;
 
-	result = m_DisplayPlane->Initialize(m_Direct3D->GetDevice(), 1.0f, 1.0f);
+	result = m_DisplayPlane->Initialize(m_Direct3D->GetDevice(), 1.0f, 0.75f);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the window model object.", L"Error", MB_OK);
@@ -429,14 +429,20 @@ bool ApplicationClass::Frame(InputClass* Input)
 		rotation += 360.0f;
 	}
 
+	
+
 	// ----- 우상단 Rotation Model RTT ----- //
-	result = RenderSceneToTextureOrigin(rotation, cubePosX);
+	result = RenderSceneToTextureOrigin(rotation);
 
 	if (!result) {
 		return false;
 	}
 
-
+	result = Render(cubePosX);
+	if (!result)
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -481,14 +487,15 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX) {
 	return true;
 }
 
-bool ApplicationClass::RenderSceneToTextureOrigin(float rotation, float cubePosX) {
+bool ApplicationClass::RenderSceneToTextureOrigin(float rotation) {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+
 	bool result;
 
 	m_RenderTextureOrigin->SetRenderTarget(m_Direct3D->GetDeviceContext());
-	m_RenderTextureOrigin->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.0f, 0.5f, 1.0f, 1.0f);	// 배경 색 지정
+	m_RenderTextureOrigin->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.9f, 0.9f, 0.9f, 1.0f);	// 배경 색 지정
 
-	//m_Camera->SetPosition(0.0f, 0.0f, -12.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
 	m_Camera->Render();
 
 	m_Direct3D->GetWorldMatrix(worldMatrix);
@@ -496,15 +503,16 @@ bool ApplicationClass::RenderSceneToTextureOrigin(float rotation, float cubePosX
 	m_RenderTextureOrigin->GetProjectionMatrix(projectionMatrix);
 
 
-	worldMatrix = XMMatrixRotationY(rotation);
 
+	worldMatrix = XMMatrixRotationRollPitchYaw(0.0f, -1.3f + rotation, 0.0f);
 
 
 	m_Model->Render(m_Direct3D->GetDeviceContext());
-	result = m_NormalMapShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
-		m_Model->GetTexture(0), m_Model->GetTexture(1),
-		m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor());
 
+	result = m_NormalMapShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+										m_Model->GetTexture(0), m_Model->GetTexture(1),
+										m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_LightPhong->GetDirection(), 
+										m_LightPhong->GetDiffuseColor());
 	if (!result)
 	{
 		return false;
@@ -513,11 +521,7 @@ bool ApplicationClass::RenderSceneToTextureOrigin(float rotation, float cubePosX
 	m_Direct3D->SetBackBufferRenderTarget();
 	m_Direct3D->ResetViewport();
 
-	result = Render(cubePosX);
-	if (!result)
-	{
-		return false;
-	}
+	
 
 	return true;
 
@@ -528,8 +532,8 @@ bool ApplicationClass::Render(float cubePosX)
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
 
-	//float refractionScale = 0.02f;
-
+	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
+	m_Camera->Render();
 
 	// Clear the buffers to begin the scene.
 	m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
@@ -538,6 +542,8 @@ bool ApplicationClass::Render(float cubePosX)
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+
+	
 	
 	//// 조명 회전
 	//static float yRot = 0.0f;
@@ -569,7 +575,7 @@ bool ApplicationClass::Render(float cubePosX)
 
 
 	// Setup matrices - Top display plane.
-	worldMatrix = XMMatrixTranslation(-4.0f, 3.0f, 0.0f);
+	worldMatrix = XMMatrixTranslation(4.0f, 2.5f, 0.0f);
 
 	// Render the display plane using the texture shader and the render texture resource.
 	m_DisplayPlane->Render(m_Direct3D->GetDeviceContext());
@@ -588,7 +594,7 @@ bool ApplicationClass::Render(float cubePosX)
 	// Ice 모델 렌더
 	if (m_filterMode == 1) {
 		// ----- Ice Model Render ----- //
-		worldMatrix = XMMatrixScaling(3.0f, 3.0f, 3.0f);
+		worldMatrix = XMMatrixScaling(2.0f, 2.0f, 2.0f);
 		worldMatrix *= XMMatrixTranslation(0.0f, 0.0f, -1.1f);
 
 		m_IceModel->Render(m_Direct3D->GetDeviceContext());
@@ -605,7 +611,7 @@ bool ApplicationClass::Render(float cubePosX)
 		m_Direct3D->EnableAlphaBlending();
 
 		// ----- Fire Model Render ----- //
-		worldMatrix = XMMatrixScaling(3.0f, 3.0f, 3.0f);
+		worldMatrix = XMMatrixScaling(2.0f, 2.0f, 2.0f);
 		worldMatrix *= XMMatrixTranslation(0.0f, 0.0f, -1.1f);
 
 		m_FireModel->Render(m_Direct3D->GetDeviceContext());

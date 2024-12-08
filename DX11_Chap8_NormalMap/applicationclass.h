@@ -49,7 +49,7 @@ public:
 private:
 	bool Render(float);
 	bool RenderSceneToTextureIce(float cubePosX);
-	bool RenderSceneToTextureOrigin(float rotation, float cubePosX);
+	bool RenderSceneToTextureOrigin(float rotation);
 
 private:
 	int m_filterMode;	// 필터 모드 정보를 저장하는 변수
