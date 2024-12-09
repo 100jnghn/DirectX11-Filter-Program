@@ -13,17 +13,17 @@ Texture2D shaderTexture1 : register(t0);
 Texture2D shaderTexture2 : register(t1);
 SamplerState SampleType : register(s0);
 
-cbuffer LightBuffer
+cbuffer LightBuffer1
 {
-    float4 diffuseColor;
-    float3 lightDirection;
+    float4 diffuseColor1;
+    float3 lightDirection1;
     float padding;
 };
 
-cbuffer LightBufferPhong
+cbuffer LightBuffer2
 {
-    float4 diffuseColorPhong;
-    float3 lightDirectionPhong;
+    float4 diffuseColor2;
+    float3 lightDirection2;
     float paddingPhong;
 };
 
@@ -50,12 +50,12 @@ float4 NormalMapPixelShader(PixelInputType input) : SV_TARGET
     float4 bumpMap;
     float3 bumpNormal;
     
-    float3 lightDir;
-    float lightIntensity;
+    float3 lightDir1;
+    float lightIntensity1;
     
     // ----- Phong 조명값 ----- //
-    float3 lightDirPhong;
-    float lightIntensityPhong;
+    float3 lightDir2;
+    float lightIntensity2;
     // ----------------------- //
     
     float4 color;
@@ -79,36 +79,47 @@ float4 NormalMapPixelShader(PixelInputType input) : SV_TARGET
     bumpNormal = normalize(bumpNormal);
     
 	// Invert the light direction for calculations.
-    lightDir = -lightDirection;
+    lightDir1 = -lightDirection1;
     
 	// Calculate the amount of light on this pixel based on the normal map value.
-    lightIntensity = saturate(dot(bumpNormal, lightDir));
+    lightIntensity1 = saturate(dot(bumpNormal, lightDir1));
+    
+    lightDir2 = -lightDirection2;
+    
+	// Calculate the amount of light on this pixel based on the normal map value.
+    lightIntensity2 = saturate(dot(bumpNormal, lightDir2));
     
     
-    
+    /*
     // ----- Phong 조명 설정 ----- //
-    lightDirPhong = -lightDirectionPhong;
-    lightDirPhong = normalize(lightDirPhong);   // 방향 벡터 정규화
+    lightDir2 = -lightDirection2;
+    lightDir2 = normalize(lightDir2);   // 방향 벡터 정규화
     
-    lightIntensityPhong = saturate(dot(bumpNormal, lightDirPhong)); // Diffuse  // Normal & Dir 벡터 내적 후 0~1값으로 변환
+    lightIntensity2 = saturate(dot(bumpNormal, lightDir2)); // Diffuse  // Normal & Dir 벡터 내적 후 0~1값으로 변환
     //lightIntensityPhong = saturate(dot(input.normal, lightDirPhong)); 
     
     float3 viewingVec = normalize(-input.position.xyz); // View 벡터 == input의 반대 방향
     
     //float3 reflectionVec = reflect(lightDirPhong, input.normal);        // Reflect 벡터   // input.normal 기준
-    float3 reflectionVec = reflect(lightDirPhong, bumpNormal);          // Reflect 벡터   // bump normal 기준
+    float3 reflectionVec = reflect(lightDir2, bumpNormal);          // Reflect 벡터   // bump normal 기준
     
-    float sLightIntensityPhong = saturate(pow(dot(reflectionVec, viewingVec), 16)); // Specular // Reflect & View 벡터 내적 후 0~1값 변환 후 지수 연산
+    float sLightIntensity2 = saturate(pow(dot(reflectionVec, viewingVec), 16)); // Specular // Reflect & View 벡터 내적 후 0~1값 변환 후 지수 연산
     // -------------------------- //
     
     
     
     
     
-    color = saturate(diffuseColor * lightIntensity + (diffuseColorPhong * lightIntensityPhong + diffuseColorPhong * sLightIntensityPhong));
+    
+    
+    color = saturate(diffuseColor1 * lightIntensity1 + (diffuseColor2 * lightIntensity2 + diffuseColor2 * sLightIntensity2));
     //color = saturate(diffuseColor * lightIntensity + diffuseColorPhong * sLightIntensityPhong);
+    */
 
 	// Combine the final light color with the texture color.
+    float4 color1 = saturate(diffuseColor1 * lightIntensity1);
+    float4 color2 = saturate(diffuseColor2 * lightIntensity2);
+    color = saturate(color1 + color2);
     color = color * textureColor * 1.3;     // 1.3은 임시 값!
 
     //return textureColor;
