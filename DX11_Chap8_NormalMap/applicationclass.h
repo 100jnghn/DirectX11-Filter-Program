@@ -19,6 +19,7 @@
 #include "fireshaderclass.h"
 #include "displayplaneclass.h"
 #include "textureshaderclass.h"
+#include "originnormalshaderclass.h"
 
 
 
@@ -60,6 +61,7 @@ private:
 	CameraClass* m_Camera;
 
 	NormalMapShaderClass* m_NormalMapShader;
+	OriginNormalShaderClass* m_OriginNormalShader;
 	GlassShaderClass* m_GlassShader;
 	FireShaderClass* m_FireShader;
 	TextureShaderClass* m_TextureShader;
@@ -72,7 +74,8 @@ private:
 	RenderTextureClass* m_RenderTextureIce;
 	RenderTextureClass* m_RenderTextureOrigin;
 
-	LightClass* m_Light;
+	LightClass* m_Light1;
+	LightClass* m_Light2;
 	LightClass* m_LightPhong;
 };
 

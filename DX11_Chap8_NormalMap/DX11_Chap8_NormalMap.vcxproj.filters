@@ -60,6 +60,9 @@
     <ClCompile Include="textureshaderclass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="originnormalshaderclass.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="applicationclass.h">
@@ -107,6 +110,9 @@
     <ClInclude Include="textureshaderclass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="originnormalshaderclass.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="normalVS.hlsl" />
@@ -117,6 +123,8 @@
     <FxCompile Include="fireVS.hlsl" />
     <FxCompile Include="texturePixel.hlsl" />
     <FxCompile Include="textureVertex.hlsl" />
+    <FxCompile Include="originPS.hlsl" />
+    <FxCompile Include="originVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="DirectXTK.lib" />

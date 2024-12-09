@@ -17,6 +17,7 @@ ApplicationClass::ApplicationClass()
 	m_Camera = 0;
 
 	m_NormalMapShader = 0;
+	m_OriginNormalShader = 0;
 	m_GlassShader = 0;
 	m_TextureShader = 0;
 
@@ -28,7 +29,8 @@ ApplicationClass::ApplicationClass()
 	m_RenderTextureIce = 0;
 	m_RenderTextureOrigin = 0;
 	
-	m_Light = 0;
+	m_Light1 = 0;
+	m_Light2 = 0;
 	m_LightPhong = 0;
 }
 
@@ -93,23 +95,32 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// Create and initialize the light object.
 	// ----- 조명1 ----- //
-    m_Light = new LightClass;
+    m_Light1 = new LightClass;
 
-    m_Light->SetDiffuseColor(1.0f, 0.0f, 0.0f, 1.0f);	// 붉은색
-	m_Light->SetPosition(1.0f, 100.0f, 0.0f);
-    m_Light->SetDirection(-2.0f, -1.0f, 3.0f);
+    m_Light1->SetDiffuseColor(0.5f, 0.0f, 0.0f, 1.0f);	// 붉은색
+	//m_Light1->SetPosition(1.0f, 100.0f, 0.0f);
+    m_Light1->SetDirection(-2.0f, -1.0f, 3.0f);
 	// ----------------- //
 
 
 
 	// ----- Phong 조명 모델로 사용 ----- //
+	m_Light2 = new LightClass;
+
+	m_Light2->SetDiffuseColor(0.0f, 0.0f, 0.5f, 1.0f);	// 푸른색
+	//m_Light2->SetPosition(-1.0f, 100.0f, 0.0f);
+	m_Light2->SetDirection(2.0f, -1.0f, 3.0f);
+	// -------------------------------- //
+
+
+
+	// ----- Original Model 조명 (Phong) ----- // 
 	m_LightPhong = new LightClass;
 
 	m_LightPhong->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);	// 하얀색
-	m_LightPhong->SetPosition(-1.0f, 100.0f, 0.0f);
-	m_LightPhong->SetDirection(2.0f, -1.0f, 3.0f);
-	// -------------------------------- //
-
+	//m_LightPhong->SetPosition(0.0f, 100.0f, 0.0f);
+	m_LightPhong->SetDirection(0.0f, -3.0f, 0.0f);
+	// --------------------------------------- //
 
 
 	
@@ -219,6 +230,19 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 
 
+	m_OriginNormalShader = new OriginNormalShaderClass;
+
+	result = m_OriginNormalShader->Initialize(m_Direct3D->GetDevice(), hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the origin normal map shader object.", L"Error", MB_OK);
+		return false;
+	}
+
+
+
+
+
 	return true;
 }
 
@@ -238,11 +262,16 @@ void ApplicationClass::Shutdown()
 	}
 
 	// Release the light object.
-    if(m_Light)
+    if(m_Light1)
     {
-        delete m_Light;
-        m_Light = 0;
+        delete m_Light1;
+        m_Light1 = 0;
     }
+	if (m_Light2)
+	{
+		delete m_Light2;
+		m_Light2 = 0;
+	}
 	if (m_LightPhong)
 	{
 		delete m_LightPhong;
@@ -276,10 +305,21 @@ void ApplicationClass::Shutdown()
 		delete m_NormalMapShader;
 		m_NormalMapShader = 0;
 	}
+	if (m_OriginNormalShader)
+	{
+		m_OriginNormalShader->Shutdown();
+		delete m_OriginNormalShader;
+		m_OriginNormalShader = 0;
+	}
 	if (m_GlassShader) {
 		m_GlassShader->Shutdown();
 		delete m_GlassShader;
 		m_GlassShader = 0;
+	}
+	if (m_FireShader) {
+		m_FireShader->Shutdown();
+		delete m_FireShader;
+		m_FireShader = 0;
 	}
 
 	// Release the camera object.
@@ -474,7 +514,7 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX) {
 	m_Model->Render(m_Direct3D->GetDeviceContext());
 	result = m_NormalMapShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 										m_Model->GetTexture(0), m_Model->GetTexture(1),
-										m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor());
+										m_Light1->GetDirection(), m_Light1->GetDiffuseColor(), m_Light2->GetDirection(), m_Light2->GetDiffuseColor());
 	if (!result)
 	{
 		return false;
@@ -493,7 +533,7 @@ bool ApplicationClass::RenderSceneToTextureOrigin(float rotation) {
 	bool result;
 
 	m_RenderTextureOrigin->SetRenderTarget(m_Direct3D->GetDeviceContext());
-	m_RenderTextureOrigin->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.9f, 0.9f, 0.9f, 1.0f);	// 배경 색 지정
+	m_RenderTextureOrigin->ClearRenderTarget(m_Direct3D->GetDeviceContext(), 0.5f, 0.5f, 0.5f, 1.0f);	// 배경 색 지정
 
 	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
 	m_Camera->Render();
@@ -509,10 +549,10 @@ bool ApplicationClass::RenderSceneToTextureOrigin(float rotation) {
 
 	m_Model->Render(m_Direct3D->GetDeviceContext());
 
-	result = m_NormalMapShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
+	result = m_OriginNormalShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 										m_Model->GetTexture(0), m_Model->GetTexture(1),
-										m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_LightPhong->GetDirection(), 
-										m_LightPhong->GetDiffuseColor());
+										m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor());
+
 	if (!result)
 	{
 		return false;
@@ -567,7 +607,7 @@ bool ApplicationClass::Render(float cubePosX)
 
 	result = m_NormalMapShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, 
 									   m_Model->GetTexture(0), m_Model->GetTexture(1), 
-									   m_Light->GetDirection(), m_Light->GetDiffuseColor(), m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor());
+									   m_Light1->GetDirection(), m_Light1->GetDiffuseColor(), m_Light2->GetDirection(), m_Light2->GetDiffuseColor());
 	if(!result)
 	{
 		return false;
