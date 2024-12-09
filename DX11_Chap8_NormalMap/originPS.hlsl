@@ -59,6 +59,7 @@ float4 OriginPixelShader(PixelInputType input) : SV_TARGET
     
     float4 color;
     float4 ambientColor;
+    float ambientStrength = 1.1f; // Ambient 강도 설정
     
     // ----- texture sampling ----- //
     textureColor = shaderTexture1.Sample(SampleType, input.tex);
@@ -88,10 +89,12 @@ float4 OriginPixelShader(PixelInputType input) : SV_TARGET
     ex = 64;
     sLightIntensity = saturate(pow(dot(reflectVec, viewingVec), ex));   // ReflecVec & ViewVec 내적 후 0~1값 치환 후 지수 연산
     
+    // ---- Ambient ----- // 
+    ambientColor = diffuseColor * ambientStrength;
     
     
     // ----- Phong Shading 계산 식 ----- //
-    color = saturate((diffuseColor * lightIntensity) + (diffuseColor * sLightIntensity));
+    color = saturate((ambientColor) + (diffuseColor * lightIntensity) + (diffuseColor * sLightIntensity));
     
     
     
