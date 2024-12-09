@@ -440,6 +440,12 @@ bool OriginNormalShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceCon
 
 
 	// ----- ShiftColorBuffer ¼¼ÆÃ ----- //
+	result = deviceContext->Map(m_shiftColorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	dataPtr3 = (ShiftColorBufferType*)mappedResource.pData;
 	dataPtr3->shiftColor = shiftColor;
 

@@ -59,7 +59,7 @@ float4 OriginPixelShader(PixelInputType input) : SV_TARGET
     
     float4 color;
     float4 ambientColor;
-    float ambientStrength = 1.1f; // Ambient 강도 설정
+    float ambientStrength = 0.1f; // Ambient 강도 설정
     
     // ----- texture sampling ----- //
     textureColor = shaderTexture1.Sample(SampleType, input.tex);
@@ -77,7 +77,7 @@ float4 OriginPixelShader(PixelInputType input) : SV_TARGET
     lightDir = normalize(lightDir); // 방향 벡터 정규화
     
     // ----- Norm & Dir 벡터 내적 후 0~1값으로 치환 ----- //
-    lightIntensity = saturate(dot(bumpNormal, lightDir));   // diffuse
+    lightIntensity = saturate(dot(bumpNormal    , lightDir));   // diffuse
     
     // ----- View 벡터 ----- //
     viewingVec = normalize(-input.position.xyz);    // View 벡터 == input의 반대 방향
@@ -104,8 +104,7 @@ float4 OriginPixelShader(PixelInputType input) : SV_TARGET
     color = saturate(color * textureColor * 1.3); // 1.3은 임시 값!
     
     // ---- filter에 따른 색상 연산 추가 ----- //
-    color *= float4(1.0f, 1.0f, 1.0f, 1.0f);
-    
+    color = saturate(color * shiftColor);
 
     
     return color;

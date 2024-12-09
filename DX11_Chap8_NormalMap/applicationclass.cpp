@@ -421,9 +421,9 @@ bool ApplicationClass::Frame(InputClass* Input)
 			}
 
 			// shift color 증가 값
-			m_shiftValue -= 0.001f;
-			if (m_shiftValue <= 0.001f) {
-				m_shiftValue = 0.001f;
+			m_shiftValue -= 0.0f;
+			if (m_shiftValue <= 0.0f) {
+				m_shiftValue = 0.0f;
 			}
 		}
 		// Fire Bright 조절
@@ -436,9 +436,9 @@ bool ApplicationClass::Frame(InputClass* Input)
 			}
 
 			// shift color 증가 값
-			m_shiftValue -= 0.001f;
-			if (m_shiftValue <= 0.001f) {
-				m_shiftValue = 0.001f;
+			m_shiftValue -= 0.0f;
+			if (m_shiftValue <= 0.0f) {
+				m_shiftValue = 0.0f;
 			}
 		}
 	}
