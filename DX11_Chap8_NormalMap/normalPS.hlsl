@@ -108,14 +108,12 @@ float4 NormalMapPixelShader(PixelInputType input) : SV_TARGET
     
     
     
-    
-    
-    
-    
     color = saturate(diffuseColor1 * lightIntensity1 + (diffuseColor2 * lightIntensity2 + diffuseColor2 * sLightIntensity2));
     //color = saturate(diffuseColor * lightIntensity + diffuseColorPhong * sLightIntensityPhong);
     */
 
+    
+    
 	// Combine the final light color with the texture color.
     float4 color1 = saturate(diffuseColor1 * lightIntensity1);
     float4 color2 = saturate(diffuseColor2 * lightIntensity2);

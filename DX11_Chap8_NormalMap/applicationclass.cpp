@@ -97,17 +97,17 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// ----- Á¶¸í1 ----- //
     m_Light1 = new LightClass;
 
-    m_Light1->SetDiffuseColor(0.5f, 0.0f, 0.0f, 1.0f);	// ºÓÀº»ö
+    m_Light1->SetDiffuseColor(1.0f, 0.2f, 0.2f, 1.0f);	// ºÓÀº»ö
 	//m_Light1->SetPosition(1.0f, 100.0f, 0.0f);
     m_Light1->SetDirection(-2.0f, -1.0f, 3.0f);
 	// ----------------- //
 
 
 
-	// ----- Phong Á¶¸í ¸ðµ¨·Î »ç¿ë ----- //
+	// ----- Á¶¸í2 ----- //
 	m_Light2 = new LightClass;
 
-	m_Light2->SetDiffuseColor(0.0f, 0.0f, 0.5f, 1.0f);	// Çª¸¥»ö
+	m_Light2->SetDiffuseColor(0.2f, 0.2f, 1.0f, 1.0f);	// Çª¸¥»ö
 	//m_Light2->SetPosition(-1.0f, 100.0f, 0.0f);
 	m_Light2->SetDirection(2.0f, -1.0f, 3.0f);
 	// -------------------------------- //
