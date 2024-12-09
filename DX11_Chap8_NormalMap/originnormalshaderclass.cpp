@@ -9,6 +9,7 @@ OriginNormalShaderClass::OriginNormalShaderClass()
 	m_matrixBuffer = 0;
 	m_sampleState = 0;
 	m_lightBuffer = 0;
+	m_shiftColorBuffer = 0;
 }
 
 OriginNormalShaderClass::OriginNormalShaderClass(const OriginNormalShaderClass& other)
@@ -63,13 +64,14 @@ void OriginNormalShaderClass::Shutdown()
 
 bool OriginNormalShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
 	ID3D11ShaderResourceView* texture1, ID3D11ShaderResourceView* texture2,
-	XMFLOAT3 lightDirection, XMFLOAT4 diffuseColor)
+	XMFLOAT3 lightDirection, XMFLOAT4 diffuseColor,
+	XMFLOAT4 shiftColor)
 {
 	bool result;
 
 
 	// Set the shader parameters that it will use for rendering.
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture1, texture2, lightDirection, diffuseColor);
+	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture1, texture2, lightDirection, diffuseColor, shiftColor);
 	if (!result)
 	{
 		return false;
@@ -92,6 +94,7 @@ bool OriginNormalShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, 
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
+	D3D11_BUFFER_DESC shiftColorBufferDesc;
 
 
 	// Initialize the pointers this function will use to null.
@@ -262,6 +265,23 @@ bool OriginNormalShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, 
 		return false;
 	}
 
+
+
+	// ----- shift color buffer desc 초기화 ----- //
+	shiftColorBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	shiftColorBufferDesc.ByteWidth = sizeof(ShiftColorBufferType);
+	shiftColorBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	shiftColorBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	shiftColorBufferDesc.MiscFlags = 0;
+	shiftColorBufferDesc.StructureByteStride = 0;
+
+	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+	result = device->CreateBuffer(&shiftColorBufferDesc, NULL, &m_shiftColorBuffer);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -349,13 +369,15 @@ void OriginNormalShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage,
 
 bool OriginNormalShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
 	ID3D11ShaderResourceView* texture1, ID3D11ShaderResourceView* texture2,
-	XMFLOAT3 lightDirection, XMFLOAT4 diffuseColor)
+	XMFLOAT3 lightDirection, XMFLOAT4 diffuseColor,
+	XMFLOAT4 shiftColor)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 	LightBufferType* dataPtr2;
+	ShiftColorBufferType* dataPtr3;	// 색상 변화 값 상수 버퍼
 
 
 	// Transpose the matrices to prepare them for the shader.
@@ -414,6 +436,19 @@ bool OriginNormalShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceCon
 
 	// Finally set the light constant buffer in the pixel shader with the updated values.
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
+
+
+
+	// ----- ShiftColorBuffer 세팅 ----- //
+	dataPtr3 = (ShiftColorBufferType*)mappedResource.pData;
+	dataPtr3->shiftColor = shiftColor;
+
+	deviceContext->Unmap(m_shiftColorBuffer, 0);
+
+	bufferNumber = 1;
+
+	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_shiftColorBuffer);
+	// --------------------------------- //
 
 
 

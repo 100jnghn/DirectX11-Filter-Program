@@ -12,6 +12,8 @@ ApplicationClass::ApplicationClass()
 
 	m_refractionScale = 0.02f;
 	m_fireBright = 1.3f;
+	m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };	// 하얀색으로 초기화
+	m_shiftValue = 0.0005f;						// ex) 빨간색을 원하면: shiftColor의 g,b -= shiftValue
 
 	m_Direct3D = 0;
 	m_Camera = 0;
@@ -370,6 +372,8 @@ bool ApplicationClass::Frame(InputClass* Input)
 	}
 	// ------------------------------ //
 
+
+
 	// ----- refractionScale 조정 ----- //
 	if (Input->IsUpArrowPressed()) {
 
@@ -381,6 +385,12 @@ bool ApplicationClass::Frame(InputClass* Input)
 			if (m_refractionScale >= 0.3f) {
 				m_refractionScale = 0.3f;
 			}
+
+			// shift color 증가 값
+			m_shiftValue += 0.001f;
+			if (m_shiftValue >= 0.001f) {
+				m_shiftValue = 0.001f;
+			}
 		}
 		// Fire Bright 조절
 		else if (m_filterMode == 2) {
@@ -389,6 +399,12 @@ bool ApplicationClass::Frame(InputClass* Input)
 			// min bright value: 0.8f;
 			if (m_fireBright <= 0.8f) {
 				m_fireBright = 0.8f;
+			}
+			
+			// shift color 증가 값
+			m_shiftValue += 0.001f;
+			if (m_shiftValue >= 0.001f) {
+				m_shiftValue = 0.001f;
 			}
 		}
 	}
@@ -403,6 +419,12 @@ bool ApplicationClass::Frame(InputClass* Input)
 			if (m_refractionScale <= 0.0f) {
 				m_refractionScale = 0.0f;
 			}
+
+			// shift color 증가 값
+			m_shiftValue -= 0.001f;
+			if (m_shiftValue <= 0.001f) {
+				m_shiftValue = 0.001f;
+			}
 		}
 		// Fire Bright 조절
 		else if (m_filterMode == 2) {
@@ -411,6 +433,12 @@ bool ApplicationClass::Frame(InputClass* Input)
 			// max bright value: 1.7f
 			if (m_fireBright >= 1.7f) {
 				m_fireBright = 1.7f;
+			}
+
+			// shift color 증가 값
+			m_shiftValue -= 0.001f;
+			if (m_shiftValue <= 0.001f) {
+				m_shiftValue = 0.001f;
 			}
 		}
 	}
@@ -421,16 +449,22 @@ bool ApplicationClass::Frame(InputClass* Input)
 	// mode1 (Ice)
 	if (Input->IsNum1Pressed()) {
 		m_filterMode = 1;
+		m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		m_shiftValue = 0.0005f;
 	}
 
 	// mode2 (Fire)
 	if (Input->IsNum2Pressed()) {
 		m_filterMode = 2;
+		m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		m_shiftValue = 0.0005f;
 	}
 
 	// mode0 (Nothing) - base
 	if (Input->IsNum0Pressed()) {
 		m_filterMode = 0;
+		m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+		m_shiftValue = 0.0005f;
 	}
 
 	// ----------- 사용자 Input 관리 끝 ----------- //
@@ -446,6 +480,21 @@ bool ApplicationClass::Frame(InputClass* Input)
 		{
 			return false;
 		}
+
+		// shift color 연산 수행 -> 파랗게
+		m_shiftColor.x -= m_shiftValue;
+		m_shiftColor.y -= m_shiftValue;
+		m_shiftColor.z = 1.0f;
+	}
+	else if (m_filterMode == 2) {
+		
+		// shift color 연산 수행 -> 빨갛게
+		m_shiftColor.x = 1.0f;
+		m_shiftColor.y -= m_shiftValue;
+		m_shiftColor.z -= m_shiftValue;
+	}
+	else if (m_filterMode == 0) {
+		
 	}
 	// -------------------------------------- //
 	
@@ -551,7 +600,8 @@ bool ApplicationClass::RenderSceneToTextureOrigin(float rotation) {
 
 	result = m_OriginNormalShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix,
 										m_Model->GetTexture(0), m_Model->GetTexture(1),
-										m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor());
+										m_LightPhong->GetDirection(), m_LightPhong->GetDiffuseColor(),
+										m_shiftColor);
 
 	if (!result)
 	{

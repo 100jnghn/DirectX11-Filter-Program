@@ -20,6 +20,11 @@ cbuffer LightBuffer
     float padding;
 };
 
+cbuffer ShiftColorBuffer
+{
+    float4 shiftColor;
+};
+
 
 
 //////////////
