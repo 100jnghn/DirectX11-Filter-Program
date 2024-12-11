@@ -54,6 +54,10 @@ private:
 
 private:
 	int m_filterMode;	// 필터 모드 정보를 저장하는 변수
+
+	float m_rotation;	// 모델 회전 값
+	float m_cubePosX;	// 모델 위치 x값
+
 	float m_refractionScale;	// Ice 효과 refraction값
 	float m_fireBright;		// Fire 효과 밝기 값
 	XMFLOAT4 m_shiftColor;	// Filter에 따른 RTT 전달 값

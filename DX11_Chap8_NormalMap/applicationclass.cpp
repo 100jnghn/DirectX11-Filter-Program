@@ -12,6 +12,9 @@ ApplicationClass::ApplicationClass()
 	// 시작 시 필터 모드 0으로 초기화
 	m_filterMode = 0;
 
+	m_rotation = 360.0f;
+	m_cubePosX = 0.0f;
+
 	m_refractionScale = 0.02f;
 	m_fireBright = 1.3f;
 	m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };	// 하얀색으로 초기화
@@ -344,18 +347,9 @@ void ApplicationClass::Shutdown()
 	return;
 }
 
-
 bool ApplicationClass::Frame(InputClass* Input)
 {
 	bool result;
-
-	// 모델 회전 값
-	static float rotation = 360.0f;
-
-	// cube 모델의 x좌표 값을 변경하는 변수
-	static float cubePosX = 0.0f;
-
-
 
 	// ---------- 사용자 Input 관리 ---------- //
 
@@ -366,11 +360,11 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 	// ----- cube 모델 좌우 이동 ----- //
 	if (Input->IsLeftArrowPressed()) {
-		cubePosX -= 0.1f;
+		m_cubePosX -= 0.1f;
 	}
 
 	if (Input->IsRightArrowPressed()) {
-		cubePosX += 0.1f;
+		m_cubePosX += 0.1f;
 	}
 	// ------------------------------ //
 
@@ -476,7 +470,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 	// ----- Filter Mode에 따른 RTT 변화 ----- //
 	// mode1 -> Ice Filter
 	if (m_filterMode == 1) {
-		result = RenderSceneToTextureIce(cubePosX);
+		result = RenderSceneToTextureIce(m_cubePosX);
 
 		if (!result)
 		{
@@ -486,7 +480,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 		
 		// 모델의 x좌표 값이 범위 안에 있다면 파랗게
-		if (cubePosX >= -1.0f && cubePosX <= 1.0f) {
+		if (m_cubePosX >= -1.0f && m_cubePosX <= 1.0f) {
 
 			// shift color 연산 수행 -> 파랗게
 			m_shiftColor.x -= m_shiftValue;
@@ -500,7 +494,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 	else if (m_filterMode == 2) {
 		
 		// 모델의 x좌표 값이 범위 안에 있다면 빨갛게
-		if (cubePosX >= -1.0f && cubePosX <= 1.0f) {
+		if (m_cubePosX >= -1.0f && m_cubePosX <= 1.0f) {
 
 			// shift color 연산 수행 -> 빨갛게
 			m_shiftColor.x = 1.0f;
@@ -529,22 +523,22 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 
 	// Update the rotation variable each frame.
-	rotation -= 0.0174532925f * 0.25f;
-	if (rotation <= 0.0f)
+	m_rotation -= 0.0174532925f * 0.25f;
+	if (m_rotation <= 0.0f)
 	{
-		rotation += 360.0f;
+		m_rotation += 360.0f;
 	}
 
 	
 
 	// ----- 우상단 Rotation Model RTT ----- //
-	result = RenderSceneToTextureOrigin(rotation);
+	result = RenderSceneToTextureOrigin(m_rotation);
 
 	if (!result) {
 		return false;
 	}
 
-	result = Render(cubePosX);
+	result = Render(m_cubePosX);
 	if (!result)
 	{
 		return false;
