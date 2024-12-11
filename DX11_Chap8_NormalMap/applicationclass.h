@@ -46,6 +46,10 @@ public:
 	void Shutdown();
 	bool Frame(InputClass*);
 
+	// 방향키 좌우 입력 -> 큐브 모델 이동
+	void InputMove(InputClass*, float value);
+
+
 
 private:
 	bool Render(float);

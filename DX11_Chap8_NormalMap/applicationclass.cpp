@@ -347,6 +347,18 @@ void ApplicationClass::Shutdown()
 	return;
 }
 
+void ApplicationClass::InputMove(InputClass* Input, float value) {
+
+	// cube 모델 좌우 이동
+	if (Input->IsLeftArrowPressed()) {
+		m_cubePosX -= value;
+	}
+
+	if (Input->IsRightArrowPressed()) {
+		m_cubePosX += value;
+	}
+}
+
 bool ApplicationClass::Frame(InputClass* Input)
 {
 	bool result;
@@ -358,15 +370,8 @@ bool ApplicationClass::Frame(InputClass* Input)
 		return false;
 	}
 
-	// ----- cube 모델 좌우 이동 ----- //
-	if (Input->IsLeftArrowPressed()) {
-		m_cubePosX -= 0.1f;
-	}
-
-	if (Input->IsRightArrowPressed()) {
-		m_cubePosX += 0.1f;
-	}
-	// ------------------------------ //
+	// 큐브 움직임 (방향키 좌우)
+	InputMove(Input, 0.1f);
 
 
 
