@@ -47,7 +47,10 @@ public:
 	bool Frame(InputClass*);
 
 	// 방향키 좌우 입력 -> 큐브 모델 이동
-	void InputMove(InputClass*, float value);
+	void InputMove(InputClass*, float);
+
+	// 방향키 상하 입력 -> 필터의 scale 조절
+	void InputFilterScale(InputClass*, float, float);
 
 
 

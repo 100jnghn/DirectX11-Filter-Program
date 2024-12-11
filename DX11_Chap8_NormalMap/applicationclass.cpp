@@ -359,6 +359,93 @@ void ApplicationClass::InputMove(InputClass* Input, float value) {
 	}
 }
 
+void ApplicationClass::InputFilterScale(InputClass* Input, float value, float shiftValue) {
+
+	if (Input->IsUpArrowPressed()) {
+
+		switch (m_filterMode) {
+			case 1:
+				m_refractionScale += value;
+
+				// max refraction scale: 0.3f
+				if (m_refractionScale >= 0.3f) {
+					m_refractionScale = 0.3f;
+				}
+
+				// shift color 증가 값
+				m_shiftValue += shiftValue;
+				if (m_shiftValue >= 0.001f) {
+					m_shiftValue = 0.001f;
+				}
+
+				break;
+
+			case 2:
+				m_fireBright -= value;
+
+				// min bright value: 0.8f;
+				if (m_fireBright <= 0.8f) {
+					m_fireBright = 0.8f;
+				}
+
+				// shift color 증가 값
+				m_shiftValue += shiftValue;
+				if (m_shiftValue >= 0.001f) {
+					m_shiftValue = 0.001f;
+				}
+
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	if (Input->IsDownArrowPressed()) {
+
+		switch (m_filterMode) {
+			case 1:
+				m_refractionScale -= value;
+
+				// min refraction scale: 0.0f
+				if (m_refractionScale <= 0.0f) {
+					m_refractionScale = 0.0f;
+				}
+
+				// shift color 감소 값
+				m_shiftValue -= shiftValue;
+				if (m_shiftValue <= 0.0005f) {
+					m_shiftValue = 0.0005f;
+				}
+
+				break;
+				
+			case 2:
+				m_fireBright += value;
+
+				// max bright value: 1.7f
+				if (m_fireBright >= 1.7f) {
+					m_fireBright = 1.7f;
+				}
+
+				// shift color 감소 값
+				m_shiftValue -= shiftValue;
+				if (m_shiftValue <= 0.0005f) {
+					m_shiftValue = 0.0005f;
+				}
+
+				break;
+
+			default:
+				break;
+		}
+	}
+}
+
+//void ApplicationClass::InputFilterMode(InputClass* Input, float filterMode) {
+//
+//}
+
 bool ApplicationClass::Frame(InputClass* Input)
 {
 	bool result;
@@ -373,77 +460,10 @@ bool ApplicationClass::Frame(InputClass* Input)
 	// 큐브 움직임 (방향키 좌우)
 	InputMove(Input, 0.1f);
 
+	// FilterMode에 따른 Refraction scale, Fire bright 조정
+	InputFilterScale(Input, 0.01f, 0.001f);
 
-
-	// ----- refractionScale 조정 ----- //
-	if (Input->IsUpArrowPressed()) {
-
-		// Ice Refraction 조절
-		if (m_filterMode == 1) {
-			m_refractionScale += 0.01f;
-
-			// max refraction scale: 0.3f
-			if (m_refractionScale >= 0.3f) {
-				m_refractionScale = 0.3f;
-			}
-
-			// shift color 증가 값
-			m_shiftValue += 0.001f;
-			if (m_shiftValue >= 0.001f) {
-				m_shiftValue = 0.001f;
-			}
-		}
-		// Fire Bright 조절
-		else if (m_filterMode == 2) {
-			m_fireBright -= 0.01f;
-
-			// min bright value: 0.8f;
-			if (m_fireBright <= 0.8f) {
-				m_fireBright = 0.8f;
-			}
-			
-			// shift color 증가 값
-			m_shiftValue += 0.001f;
-			if (m_shiftValue >= 0.001f) {
-				m_shiftValue = 0.001f;
-			}
-		}
-	}
-
-	if (Input->IsDownArrowPressed()) {
-
-		// Ice Refraction 조절
-		if (m_filterMode == 1) {
-			m_refractionScale -= 0.01f;
-
-			// min refraction scale: 0.0f
-			if (m_refractionScale <= 0.0f) {
-				m_refractionScale = 0.0f;
-			}
-
-			// shift color 증가 값
-			m_shiftValue -= 0.0f;
-			if (m_shiftValue <= 0.0f) {
-				m_shiftValue = 0.0f;
-			}
-		}
-		// Fire Bright 조절
-		else if (m_filterMode == 2) {
-			m_fireBright += 0.01f;
-
-			// max bright value: 1.7f
-			if (m_fireBright >= 1.7f) {
-				m_fireBright = 1.7f;
-			}
-
-			// shift color 증가 값
-			m_shiftValue -= 0.0f;
-			if (m_shiftValue <= 0.0f) {
-				m_shiftValue = 0.0f;
-			}
-		}
-	}
-	// ----------------------------------- //
+	
 
 
 	// ----- 숫자 눌러서 filter mode 변경 ----- //
