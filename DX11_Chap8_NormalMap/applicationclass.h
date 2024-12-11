@@ -55,6 +55,9 @@ public:
 	// 1,2,0 입력 -> 필터 모드 변경
 	void InputFilterMode(InputClass*, int, float);
 
+	// 현재 filter mode에 따라 실질적인 필터 변경 작업 수행
+	bool ChangeFilter();
+
 
 
 private:

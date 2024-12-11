@@ -447,12 +447,56 @@ void ApplicationClass::InputFilterMode(InputClass* Input, int filterMode, float 
 	m_filterMode = filterMode;
 
 	m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-	m_shiftValue = shiftValue;	// (0.005f)
+	m_shiftValue = shiftValue;	// (0.0005f)
 }
 
-//void ApplicationClass::ChangeFilter() {
-//
-//}
+bool ApplicationClass::ChangeFilter() {
+
+	bool result;
+
+	switch (m_filterMode) {
+		case 1:
+			result = RenderSceneToTextureIce(m_cubePosX);
+
+			if (!result)
+			{
+				return false;
+			}
+
+			// 모델의 x좌표 값이 범위 안에 있다면 파랗게
+			if (m_cubePosX >= -1.0f && m_cubePosX <= 1.0f) {
+
+				// shift color 연산 수행 -> 파랗게
+				m_shiftColor.x -= m_shiftValue;
+				m_shiftColor.y -= m_shiftValue;
+				m_shiftColor.z = 1.0f;
+			}
+
+			break;
+
+		case 2:
+			// 모델의 x좌표 값이 범위 안에 있다면 빨갛게
+			if (m_cubePosX >= -1.0f && m_cubePosX <= 1.0f) {
+
+				// shift color 연산 수행 -> 빨갛게
+				m_shiftColor.x = 1.0f;
+				m_shiftColor.y -= m_shiftValue;
+				m_shiftColor.z -= m_shiftValue;
+			}
+
+			break;
+
+		case 0:
+			break;
+
+		default:
+			break;
+	}
+
+
+
+	return true;
+}
 
 bool ApplicationClass::Frame(InputClass* Input)
 {
@@ -476,75 +520,27 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 	// 숫자 눌러서 filter mode 변경
 	if (Input->IsNum1Pressed()) {	// mode1 -> Ice Filter
-		InputFilterMode(Input, 1, 0.005f);
+		InputFilterMode(Input, 1, 0.0005f);
 	}
 
 	if (Input->IsNum2Pressed()) {	// mode2 -> Fire Filter
-		InputFilterMode(Input, 2, 0.005f);
+		InputFilterMode(Input, 2, 0.0005f);
 	}
 
 	if (Input->IsNum0Pressed()) {	// mode0 -> basic
-		InputFilterMode(Input, 0, 0.005f);
+		InputFilterMode(Input, 0, 0.0005f);
 	}
 
-	// ----------- 사용자 Input 관리 끝 ----------- //
 
 
 
-	// ----- Filter Mode에 따른 RTT 변화 ----- //
-	// mode1 -> Ice Filter
-	if (m_filterMode == 1) {
-		result = RenderSceneToTextureIce(m_cubePosX);
 
-		if (!result)
-		{
-			return false;
-		}
+	// 현재 filter mode에 따라 실질적인 필터 변경 작업 수행
+	ChangeFilter();
 
 
-		
-		// 모델의 x좌표 값이 범위 안에 있다면 파랗게
-		if (m_cubePosX >= -1.0f && m_cubePosX <= 1.0f) {
-
-			// shift color 연산 수행 -> 파랗게
-			m_shiftColor.x -= m_shiftValue;
-			m_shiftColor.y -= m_shiftValue;
-			m_shiftColor.z = 1.0f;
-		}
-
-		
-	}
-	// mode2 -> Fire Filter
-	else if (m_filterMode == 2) {
-		
-		// 모델의 x좌표 값이 범위 안에 있다면 빨갛게
-		if (m_cubePosX >= -1.0f && m_cubePosX <= 1.0f) {
-
-			// shift color 연산 수행 -> 빨갛게
-			m_shiftColor.x = 1.0f;
-			m_shiftColor.y -= m_shiftValue;
-			m_shiftColor.z -= m_shiftValue;
-		}
-		
-		
-	}
-	else if (m_filterMode == 0) {
-		
-	}
-	// -------------------------------------- //
 	
 	
-
-	
-	// Render the graphics scene.
-	// 어떤 filter mode이던 모두 Render()를 수행해야 하므로(Cube Model을 나타내야 하기 때문?) 조건문 수행 후 Render() 수행하는 코드로 작성
-	//result = Render(cubePosX);
-	//if (!result)
-	//{
-	//	return false;
-	//}
-
-
 
 	// Update the rotation variable each frame.
 	m_rotation -= 0.0174532925f * 0.25f;
@@ -555,7 +551,7 @@ bool ApplicationClass::Frame(InputClass* Input)
 
 	
 
-	// ----- 우상단 Rotation Model RTT ----- //
+	// 우상단 Rotation Model RTT
 	result = RenderSceneToTextureOrigin(m_rotation);
 
 	if (!result) {
@@ -667,17 +663,6 @@ bool ApplicationClass::Render(float cubePosX)
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
-
-	
-	
-	//// 조명 회전
-	//static float yRot = 0.0f;
-	//yRot += 0.02f;
-	//m_Light->SetDirection(0.0f, sinf(yRot), 1.0f);	// sinf, cosf
-	
-
-	// WorldMatrix 값으로 모델 회전
-    //worldMatrix = XMMatrixRotationY(rotation);
 
 
 
