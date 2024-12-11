@@ -2,6 +2,8 @@
 // Filename: applicationclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "applicationclass.h"
+#include "iostream"
+using namespace std;
 
 
 
@@ -481,17 +483,32 @@ bool ApplicationClass::Frame(InputClass* Input)
 			return false;
 		}
 
-		// shift color ¿¬»ê ¼öÇà -> ÆÄ¶þ°Ô
-		m_shiftColor.x -= m_shiftValue;
-		m_shiftColor.y -= m_shiftValue;
-		m_shiftColor.z = 1.0f;
+
+		
+		// ¸ðµ¨ÀÇ xÁÂÇ¥ °ªÀÌ ¹üÀ§ ¾È¿¡ ÀÖ´Ù¸é ÆÄ¶þ°Ô
+		if (cubePosX >= -1.0f && cubePosX <= 1.0f) {
+
+			// shift color ¿¬»ê ¼öÇà -> ÆÄ¶þ°Ô
+			m_shiftColor.x -= m_shiftValue;
+			m_shiftColor.y -= m_shiftValue;
+			m_shiftColor.z = 1.0f;
+		}
+
+		
 	}
+	// mode2 -> Fire Filter
 	else if (m_filterMode == 2) {
 		
-		// shift color ¿¬»ê ¼öÇà -> »¡°²°Ô
-		m_shiftColor.x = 1.0f;
-		m_shiftColor.y -= m_shiftValue;
-		m_shiftColor.z -= m_shiftValue;
+		// ¸ðµ¨ÀÇ xÁÂÇ¥ °ªÀÌ ¹üÀ§ ¾È¿¡ ÀÖ´Ù¸é »¡°²°Ô
+		if (cubePosX >= -1.0f && cubePosX <= 1.0f) {
+
+			// shift color ¿¬»ê ¼öÇà -> »¡°²°Ô
+			m_shiftColor.x = 1.0f;
+			m_shiftColor.y -= m_shiftValue;
+			m_shiftColor.z -= m_shiftValue;
+		}
+		
+		
 	}
 	else if (m_filterMode == 0) {
 		
