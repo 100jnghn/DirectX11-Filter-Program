@@ -52,6 +52,9 @@ public:
 	// 방향키 상하 입력 -> 필터의 scale 조절
 	void InputFilterScale(InputClass*, float, float);
 
+	// 1,2,0 입력 -> 필터 모드 변경
+	void InputFilterMode(InputClass*, int, float);
+
 
 
 private:

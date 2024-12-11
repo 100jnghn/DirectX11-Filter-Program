@@ -442,7 +442,15 @@ void ApplicationClass::InputFilterScale(InputClass* Input, float value, float sh
 	}
 }
 
-//void ApplicationClass::InputFilterMode(InputClass* Input, float filterMode) {
+void ApplicationClass::InputFilterMode(InputClass* Input, int filterMode, float shiftValue) {
+	
+	m_filterMode = filterMode;
+
+	m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	m_shiftValue = shiftValue;	// (0.005f)
+}
+
+//void ApplicationClass::ChangeFilter() {
 //
 //}
 
@@ -466,26 +474,17 @@ bool ApplicationClass::Frame(InputClass* Input)
 	
 
 
-	// ----- 숫자 눌러서 filter mode 변경 ----- //
-	// mode1 (Ice)
-	if (Input->IsNum1Pressed()) {
-		m_filterMode = 1;
-		m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-		m_shiftValue = 0.0005f;
+	// 숫자 눌러서 filter mode 변경
+	if (Input->IsNum1Pressed()) {	// mode1 -> Ice Filter
+		InputFilterMode(Input, 1, 0.005f);
 	}
 
-	// mode2 (Fire)
-	if (Input->IsNum2Pressed()) {
-		m_filterMode = 2;
-		m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-		m_shiftValue = 0.0005f;
+	if (Input->IsNum2Pressed()) {	// mode2 -> Fire Filter
+		InputFilterMode(Input, 2, 0.005f);
 	}
 
-	// mode0 (Nothing) - base
-	if (Input->IsNum0Pressed()) {
-		m_filterMode = 0;
-		m_shiftColor = { 1.0f, 1.0f, 1.0f, 1.0f };
-		m_shiftValue = 0.0005f;
+	if (Input->IsNum0Pressed()) {	// mode0 -> basic
+		InputFilterMode(Input, 0, 0.005f);
 	}
 
 	// ----------- 사용자 Input 관리 끝 ----------- //
