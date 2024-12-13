@@ -94,7 +94,8 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
     // Create and initialize the model object.
     m_Model = new ModelClass;
 
-    result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, (WCHAR*)L"data/block.jpg", (WCHAR*)L"data/blockNormal.jpg", NULL);
+    result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFilename, 
+			(WCHAR*)L"data/block.jpg", (WCHAR*)L"data/blockNormal.jpg", NULL);
     if(!result)
     {
         return false;
@@ -105,19 +106,13 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
     m_Light1 = new LightClass;
 
     m_Light1->SetDiffuseColor(1.0f, 0.2f, 0.2f, 1.0f);	// 붉은색
-	//m_Light1->SetPosition(1.0f, 100.0f, 0.0f);
     m_Light1->SetDirection(-2.0f, -1.0f, 3.0f);
-	// ----------------- //
-
-
 
 	// ----- 조명2 ----- //
 	m_Light2 = new LightClass;
 
 	m_Light2->SetDiffuseColor(0.2f, 0.2f, 1.0f, 1.0f);	// 푸른색
-	//m_Light2->SetPosition(-1.0f, 100.0f, 0.0f);
 	m_Light2->SetDirection(2.0f, -1.0f, 3.0f);
-	// -------------------------------- //
 
 
 
@@ -552,11 +547,11 @@ bool ApplicationClass::Frame(InputClass* Input)
 	
 
 	// 우상단 Rotation Model RTT
-	result = RenderSceneToTextureOrigin(m_rotation);
-
-	if (!result) {
-		return false;
-	}
+	//result = RenderSceneToTextureOrigin(m_rotation);
+	//
+	//if (!result) {
+	//	return false;
+	//}
 
 	result = Render(m_cubePosX);
 	if (!result)

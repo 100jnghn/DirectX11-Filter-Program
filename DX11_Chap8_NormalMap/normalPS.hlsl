@@ -63,30 +63,23 @@ float4 NormalMapPixelShader(PixelInputType input) : SV_TARGET
 
     
 	
-	// Sample the pixel color from the color texture at this location.
+	// 텍스쳐 픽셀 Sampling
     textureColor = shaderTexture1.Sample(SampleType, input.tex);
-
-	// Sample the pixel from the normal map.
     bumpMap = shaderTexture2.Sample(SampleType, input.tex);
     
-	// Expand the range of the normal value from (0, +1) to (-1, +1).
+	// normal Value 범위 지정
     bumpMap = (bumpMap * 2.0f) - 1.0f;
     
-	// Calculate the normal from the data in the normal map.
+    // Normal map 데이터를 사용해 Normal 계산
     bumpNormal = (bumpMap.x * input.tangent) + (bumpMap.y * input.binormal) + (bumpMap.z * input.normal);
-    
-	// Normalize the resulting bump normal.
     bumpNormal = normalize(bumpNormal);
     
 	// Invert the light direction for calculations.
     lightDir1 = -lightDirection1;
-    
 	// Calculate the amount of light on this pixel based on the normal map value.
     lightIntensity1 = saturate(dot(bumpNormal, lightDir1));
     
     lightDir2 = -lightDirection2;
-    
-	// Calculate the amount of light on this pixel based on the normal map value.
     lightIntensity2 = saturate(dot(bumpNormal, lightDir2));
     
     

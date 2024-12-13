@@ -443,7 +443,7 @@ bool NormalMapShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContex
 
 
 
-	// ----- 조명2 (Phong) ----- //
+	// ----- 조명2 ----- //
 	result = deviceContext->Map(m_lightBuffer2, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if (FAILED(result))
 	{
@@ -451,8 +451,8 @@ bool NormalMapShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContex
 	}
 
 	LightBufferType* dataPtr3 = (LightBufferType*)mappedResource.pData;
-	dataPtr3->diffuseColor = diffuseColor2;
-	dataPtr3->lightDirection = lightDirection2;
+	dataPtr3->diffuseColor = diffuseColor2;			// 색상
+	dataPtr3->lightDirection = lightDirection2;		// 방향
 	dataPtr3->padding = 0.0f;
 
 	deviceContext->Unmap(m_lightBuffer2, 0);
