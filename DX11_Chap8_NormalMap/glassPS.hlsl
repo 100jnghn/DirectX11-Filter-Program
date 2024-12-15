@@ -41,27 +41,25 @@ float4 GlassPixelShader(PixelInputType input) : SV_TARGET
     float4 textureColor;
     float4 color;
 
-
-    // Calculate the projected refraction texture coordinates.
+    // refraction texture 좌표 계산
     refractTexCoord.x = input.refractionPosition.x / input.refractionPosition.w / 2.0f + 0.5f;
     refractTexCoord.y = -input.refractionPosition.y / input.refractionPosition.w / 2.0f + 0.5f;
 
-    // Sample the normal from the normal map texture.
+    // Normal map 샘플링
     normalMap = normalTexture.Sample(SampleType, input.tex);
 
-    // Expand the range of the normal from (0,1) to (-1,+1).
+    // 범위 재지정: (0,1) to (-1,+1).
     normal = (normalMap.xyz * 2.0f) - 1.0f;
-
-    // Re-position the texture coordinate sampling position by the normal map value to simulate light distortion through glass.
+    
     refractTexCoord = refractTexCoord + (normal.xy * refractionScale);
 
-    // Sample the texture pixel from the refraction texture using the perturbed texture coordinates.
+    // 계산한 refraction texture 좌표를 사용한 refractionTexture 샘플링
     refractionColor = refractionTexture.Sample(SampleType, refractTexCoord);
 
-    // Sample the texture pixel from the glass color texture.
+    // Ice Texture 샘플링
     textureColor = colorTexture.Sample(SampleType, input.tex);
 
-    // Evenly combine the glass color and refraction value for the final color.
+    // Ice, Refraction을 보간한 최종 색상
     color = lerp(refractionColor, textureColor, 0.5f);
 
     return color;

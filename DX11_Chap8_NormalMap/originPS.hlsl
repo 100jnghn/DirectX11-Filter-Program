@@ -77,7 +77,7 @@ float4 OriginPixelShader(PixelInputType input) : SV_TARGET
     lightDir = normalize(lightDir); // 방향 벡터 정규화
     
     // ----- Norm & Dir 벡터 내적 후 0~1값으로 치환 ----- //
-    lightIntensity = saturate(dot(bumpNormal    , lightDir));   // diffuse
+    lightIntensity = saturate(dot(bumpNormal, lightDir));   // diffuse
     
     // ----- View 벡터 ----- //
     viewingVec = normalize(-input.position.xyz);    // View 벡터 == input의 반대 방향

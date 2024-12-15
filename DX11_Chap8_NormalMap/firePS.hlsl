@@ -40,11 +40,10 @@ float4 FirePixelShader(PixelInputType input) : SV_TARGET
     float4 alphaValue;
     float4 color;
     
-    input.tex.y -= textureTranslation;
+    input.tex.y -= textureTranslation;  // y좌표값 감소: 텍스쳐 아래로 움직임
     
+    // Trans값을 사용한 Texture 샘플링
     alphaValue = alphaTexture.Sample(SampleType, input.tex - textureTranslation * 0.1f);
-
-    
     textureColor1 = shaderTexture1.Sample(SampleType, input.tex + textureTranslation * 0.2f);
     textureColor2 = shaderTexture2.Sample(SampleType, input.tex - textureTranslation * 0.2f);
     

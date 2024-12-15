@@ -129,9 +129,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// ----- Ice RTT 초기화 ----- //
 	strcpy_s(modelFilename, "data/square.txt");			// Ice를 입힐 모델 (네모)
-	//strcpy_s(textureFilename1, "data/ice01.tga");		// IceImg
-	//strcpy_s(textureFilename2, "data/icebump01.tga");	// IceBump
-
+	
 	// 모델 생성
 	m_IceModel = new ModelClass;
 
@@ -171,7 +169,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 
 
-	// ----- Fire RTT 초기화 ----- //
+	// ----- Fire filter 초기화 ----- //
 	// 모델 생성
 	m_FireModel = new ModelClass;
 
@@ -194,12 +192,13 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// ------------ Fire RTT 초기화 끝 -------------- //
+	// ------------ Fire 초기화 끝 -------------- //
 
 
 
 	// ---------- Original Renter Texture 생성 ---------- //
 	// 우상단에 필터 효과를 뺀 Original Model Render 
+	// 렌더할 plane 생성
 	m_DisplayPlane = new DisplayPlaneClass;
 
 	result = m_DisplayPlane->Initialize(m_Direct3D->GetDevice(), 1.0f, 0.75f);
@@ -210,7 +209,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 
-
+	// RTT 생성
 	m_RenderTextureOrigin = new RenderTextureClass;
 	
 	result = m_RenderTextureOrigin->Initialize(m_Direct3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR, 1);
@@ -221,7 +220,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 
-
+	// Plane의 Texture 생성
 	m_TextureShader = new TextureShaderClass;
 
 	result = m_TextureShader->Initialize(m_Direct3D->GetDevice(), hwnd);
@@ -231,7 +230,7 @@ bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 
-
+	// Cube Model의 Texture 생성
 	m_OriginNormalShader = new OriginNormalShaderClass;
 
 	result = m_OriginNormalShader->Initialize(m_Direct3D->GetDevice(), hwnd);
@@ -547,11 +546,11 @@ bool ApplicationClass::Frame(InputClass* Input)
 	
 
 	// 우상단 Rotation Model RTT
-	//result = RenderSceneToTextureOrigin(m_rotation);
-	//
-	//if (!result) {
-	//	return false;
-	//}
+	result = RenderSceneToTextureOrigin(m_rotation);
+	
+	if (!result) {
+		return false;
+	}
 
 	result = Render(m_cubePosX);
 	if (!result)
@@ -576,10 +575,6 @@ bool ApplicationClass::RenderSceneToTextureIce(float cubePosX) {
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
-
-	// Rotate the world matrix by the rotation value so that the cube will spin.
-	//worldMatrix = XMMatrixRotationY(rotation);
-
 
 	// ----- 방향키 Input에 따른 worldMatrix 변경 ----- //
 	worldMatrix = XMMatrixTranslation(cubePosX, 0.0f, 0.0f);
