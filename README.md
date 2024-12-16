@@ -123,3 +123,32 @@ Pixel Shader에서 각 Texture들을 샘플링할 때 y좌표를 감소시킨 �
 <img src="https://github.com/user-attachments/assets/201f103e-06d4-44ea-901b-4a8a81bd5b5b" width="300" height="300"/>
 <img src="https://github.com/user-attachments/assets/9e9b2464-7235-41b0-ad80-234fc2763ed8" width="300" height="300"/>
 <img src="https://github.com/user-attachments/assets/0f505be0-73fe-4cc0-82a0-945cff5649db" width="300" height="300"/>
+<br>
+<br>
+<br>
+### (07) - 사용자 입력을 통한 Filter 효과(3) - Filter 제거
+숫자 0을 눌러 현재 적용된 필터를 제거합니다.<br>
+Ice Filter 효과나 Fire Filter 효과가 적용된 상태에서 숫자 0을 누르면 현재 적용된 필터가 제거됩니다.<br>
+아래는 순서대로 숫자1, 숫자2, 숫자0을 누른 후의 모습입니다.<br>
+<img src="https://github.com/user-attachments/assets/0195793c-bfd7-464b-9baf-f913f146dd32" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/34e8f25c-f1d5-4543-8544-ff387797f221" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/97938469-b8f1-4e64-807a-48fcb12f8156" width="300" height="200"/>
+<br>
+<br>
+<br>
+### (08) - Cube Model 관찰을 위한 Render To Texture
+화면의 우측 상단에 Render To Texture가 나타나며, 이를 통해 각 필터를 적용함으로 인해 변화하는 Cube의 Texture 변화를 관찰할 수 있습니다.<br>
+Filter를 적용한 상태에서는 Filter에 모델이 가려지기 때문에 변화를 관찰하기 어렵습니다.<br>
+따라서 필터 효과 없이 Render To Texture를 통해 Cube를 렌더합니다.<br>
+Render To Texture를 통해 보이는 Cube는 일정한 속도로 회전하며 이를 통해 Cube의 4면 모두를 관찰할 수 있습니다.<br>
+<br>
+Render To Texture에는 Light1(빨간색), Light2(파란색)이 아닌 LightPhong(하얀색) 조명이 사용됩니다.<br>
+Shader에서는 Phong 조명 연산이 수행되며 이 조명은 Render To Texture 내의 모델에만 적용됩니다.<br>
+<br>
+우상단 RTT를 통해 Phong 조명이 사용된 회전하는 Cube를 관찰<br>
+<img src="https://github.com/user-attachments/assets/23813d65-8e24-4767-abe8-6335d0e76a4e" width="600" height="400"/>
+<br>
+<br>
+<br>
+
+
