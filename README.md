@@ -9,8 +9,9 @@
 <br>
 
 ## 사용 기술
-- C++
 - DirectX 11
+- C++
+- hlsl (Shaer Files)
 <br>
 <br>
 
@@ -19,3 +20,29 @@
 
  이 프로젝트에서는 물체에 Ice Filter와 Fire Filter 기능을 적용하고,<br>
 필터에 따른 물체의 색상 변화를 Render To Texture를 통해 관찰할 수 있습니다.
+<br>
+<br>
+<br>
+
+## 기능 소개
+- 방향키 ← →를 눌러 Cube 모델을 좌우로 이동시킬 수 있습니다.
+- 숫자 1을 눌러 Cube의 앞에 Ice 필터를 띄울 수 있습니다.
+- 숫자 2를 눌러 Cube의 앞에 Fire 필터를 띄울 수 있습니다.
+- 숫자 0을 눌러 Cube에 가해지는 필터를 제거할 수 있습니다.
+- 필터1이나 필터2가 켜진 상태에서 방향키 ↑↓를 눌러 Filter 효과를 키우거나 줄일 수 있습니다.
+- Cube 모델의 위치가 필터에서 크게 벗어나면 필터 효과가 가해지지 않습니다.
+- 우측 상단 Render Texture를 통해 모델에 가해지는 Filter 효과를 직관적으로 관찰할 수 있습니다.
+
+## 구현 기능 상세
+### (1) - Cube Model Render
+![image](https://github.com/user-attachments/assets/bc999eaf-cbb4-48e7-93c1-d05524ed5df0)<br>
+cube.txt File를 사용해 네모난 큐브 모델을 로드했습니다.<br>
+큐브 모델의 Texture는 block.jpg 리소스를 저장해 프로젝트에 포함했고,<br>
+normal map 변환 사이트를 이용해 blocknormal.jpg를 만들어 프로젝트에 포함시켰습니다. 아래는 원본 텍스쳐 이미지입니다.<br>
+<br>
+(좌) block.jpg  /  (우) blockNormal.jpg<br>
+<img src="https://github.com/user-attachments/assets/be4bee62-9199-4367-9832-d017f9272b5e" width="400" height="400"/>
+<img src="https://github.com/user-attachments/assets/2d11a242-0696-4064-9400-1bc37712865f" width="400" height="400"/>
+<br>
+
+
