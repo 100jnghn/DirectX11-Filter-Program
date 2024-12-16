@@ -78,3 +78,23 @@ Cube가 오른쪽으로 이동하여 좌측면에 푸른 조명이 보이는 이
 중간 부분은 두 조명이 합쳐져 보라색 색상이 나타납니다.<br>
 <img src="https://github.com/user-attachments/assets/498b9e0c-34e8-4e50-bc95-996974031a6c" width="450" height="300"/>
 <img src="https://github.com/user-attachments/assets/cda26487-b3fa-4273-b8cd-517c0ffd6f15" width="450" height="300"/>
+<br>
+<br>
+<br>
+### (05) - 사용자 입력을 통한 Filter 효과(1) - Ice Filter (Render To Texture)
+숫자 1을 눌러 Ice Filter를 화면에 띄우고 모델에 효과를 적용할 수 있습니다.<br>
+<br>
+Ice Filter가 적용된 상태에서 방향키 ↑↓를 눌러 필터의 강도를 높이고 줄일 수 있습니다.<br>
+Refraction Scale은 0.0~0.3 범위로 제한됩니다(기본 0.02).<br>
+또한, 필터를 적용한 상태에서도 모델을 좌우로 움직일 수 있으며 필터 밖으로 벗어난 Cube 모델은 필터의 효과를 받지 않습니다.<br>
+<br>
+(좌) refraction scale = 0.0  /  (중) refraction scale = 0.02(기본)  /  (우) refraction scale = 0.3<br>
+<br>
+<img src="https://github.com/user-attachments/assets/38526505-1d4e-4af0-953b-b554783dfde7" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/0e050243-b80a-40f1-9fdf-ebf8a8d854ab" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/3787f5ec-88a3-468a-a283-13ec77809e48" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/2b231eae-f668-4c05-a3b1-84f40183e5a4" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/bb74f44d-0f06-4cca-bf67-2f060914907f" width="450" height="300"/>
+<br>
+<br>
+<br>
