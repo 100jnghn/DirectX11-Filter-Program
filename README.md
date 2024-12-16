@@ -150,5 +150,36 @@ Shader에서는 Phong 조명 연산이 수행되며 이 조명은 Render To Text
 <br>
 <br>
 <br>
+### (09) - Render To Texture를 통한 Cube 모델의 변화 관찰
+Ice Filter를 적용하면 shift color 변수의 r, g 값을 감소시켜<br>
+우측 상단 Render To Texture를 통해 보이는 Cube Model이 점차 파랗게 보이도록 합니다.<br>
+Fire Filter 또한 비슷하게 g, b 값을 감소시켜 점차 빨갛게 변하게 됩니다.<br>
+<br>
+아래는 각 필터를 적용한 후 일정 시간이 지나 Render To Texture의 Cube 모델이 변한 예시 이미지입니다.<br>
+Filter를 통해 Cube의 색상이 변하더라도 화면 중앙의 Cube는 색상이 변하지 않고 오직 Render Texture 내부 Cube의 Texture 색상만 변합니다.<br>
+또한, 필터를 변경할 땐 원래의 색상으로 돌아간 다음 서서히 색상히 변하도록 하고, 숫자 0을 눌러 Filter를 제거하면 원본 색상을 계속 유지합니다.<br>
+<br>
+(좌) Ice 적용 후 파랗게 변함  /  (우) Fire 적용 후 빨갛게 변함<br>
+<img src="https://github.com/user-attachments/assets/1292078c-c8fe-4ecd-ac36-18b32c991912" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/25a48f17-703b-4478-baf1-27fa3eb9cf59" width="450" height="300"/>
+<br>
+<br>
+각 Filter에서 방향키 ↑↓를 누름으로 필터의 강도를 변경함에 따라 색상 변화 속도 또한 증가하고 감소합니다.<br>
+강도에 따라 m_shiftValue 값이 증감하며 값의 범위는 0.001~0.0005로 제한됩니다.<br>
+Input에 따라 변화하는 shiftValue는 m_shiftColor의 색상에 적용되어 Filter에 따라 색상이 변하도록 하고,<br>
+m_shiftColor는 Render To Texture의 Cube 모델의 Shader에 상수 버퍼로 전달되어<br>
+Texture, Texture Normal, Phong 조명 연산 등을 수행한 최종 Pixel Color에 누적해주어<br>
+해당 색상으로 색상이 서서히 변하는 현상을 구현했습니다.<br>
+<br>
+Filter Mode를 변경할 때 m_shiftColor와 m_shiftValue는 모두 초기 기본 값으로 초기화되어<br>
+이전 Filter의 결과가 다른 Filter에 누적되어 영항을 미치지 않도록 초기화 코드를 작성했습니다.<br>
+<br>
+<br>
+<br>
+### (10) - Cube의 위치에 따른 Render Texture 변화 제한
+사용자가 Cube를 움직여 Filter 밖으로 벗어난 경우 Render To Texture에 가해지는 색상 변화가 일어나지 않습니다.<br>
+Cube Position 값이 일정 범위 내에 있고 Filter가 켜진 상태에서만 색상 변화가 일어납니다.<br>
+<img src="https://github.com/user-attachments/assets/dd6c66ed-ee92-4d67-afbd-48a607c81992" width="600" height="400"/>
+
 
 
