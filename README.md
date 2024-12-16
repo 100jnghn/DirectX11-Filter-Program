@@ -59,6 +59,7 @@ applicationclass에 m_cubePosX 변수를 선언하고 inputclass에 좌우 방�
 IsLeftArrowPressed(), IsRightArrowPressed() 함수를 작성했습니다.<br>
 applicationclass에서 해당 함수의 true 값을 받으면 m_cubePosX의 값을 증가 감소시키고,<br>
 이 값을 Render() 함수에 전달하여 worldMatrix의 x값을 이동시켜 모델 움직임을 구현했습니다.<br>
+<br>
 (좌) 왼쪽으로 이동 / (우) 오른쪽으로 이동<br>
 <img src="https://github.com/user-attachments/assets/4d2f43e2-d12e-4619-a373-c8bcd5e612b1" width="450" height="300"/>
 <img src="https://github.com/user-attachments/assets/6ece9366-4b8e-41b5-acb0-cb16f1652e7f" width="450" height="300"/>
@@ -89,7 +90,6 @@ Refraction Scale은 0.0~0.3 범위로 제한됩니다(기본 0.02).<br>
 또한, 필터를 적용한 상태에서도 모델을 좌우로 움직일 수 있으며 필터 밖으로 벗어난 Cube 모델은 필터의 효과를 받지 않습니다.<br>
 <br>
 (좌) refraction scale = 0.0  /  (중) refraction scale = 0.02(기본)  /  (우) refraction scale = 0.3<br>
-<br>
 <img src="https://github.com/user-attachments/assets/38526505-1d4e-4af0-953b-b554783dfde7" width="300" height="200"/>
 <img src="https://github.com/user-attachments/assets/0e050243-b80a-40f1-9fdf-ebf8a8d854ab" width="300" height="200"/>
 <img src="https://github.com/user-attachments/assets/3787f5ec-88a3-468a-a283-13ec77809e48" width="300" height="200"/>
@@ -98,3 +98,28 @@ Refraction Scale은 0.0~0.3 범위로 제한됩니다(기본 0.02).<br>
 <br>
 <br>
 <br>
+### (06) - 사용자 입력을 통한 Filter 효과(2) - Fire Filter (Alpha Texture)
+숫자 2를 눌러 Fire Filter를 화면에 띄우고 모델에 효과를 적용할 수 있습니다.<br>
+Fire Filter가 적용된 상태에서 방향키 ↑↓를 눌러 필터의 강도를 높이고 줄일 수 있습니다.<br>
+Fire의 강도(밝기)는 0.8~1.7 범위로 제한됩니다(기본 1.3).<br>
+또한, 필터를 적용한 상태에서도 모델을 좌우로 움직일 수 있으며 필터 밖으로 벗어난 Cube 모델은 필터의 효과를 받지 않습니다.<br>
+<br>
+Fire Filter에 사용된 Texture들은 flame01, flame02, flame alpha입니다.<br>
+Pixel Shader에서 각 Texture들을 샘플링할 때 y좌표를 감소시킨 후<br>
+상수 버퍼로 전달받은 texture translation 값과의 연산을 통해 용암이 흐르는 듯한 효과를 구현했습니다.<br>
+<br>
+(좌) fire bright = 1.7  /  (중) fire bright = 1.3(기본)  /  (우) fire bright = 0.8<br>
+<img src="https://github.com/user-attachments/assets/5195f8bd-545b-4bdf-b64c-6bcd79f6a3ce" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/57704d79-fa63-4ade-ad5c-d3b4371f0f44" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/5da0412d-b5c4-4f4b-9dbb-cfa98f6737a3" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/786e44f8-7975-4761-b2a4-1c436e1ac8ae" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/798420f0-0ae6-42f3-8585-e9df5fdfb8c2" width="450" height="300"/>
+<br>
+<br>
+<br>
+아래는 원본 이미지입니다.<br>
+<br>
+(좌) flame01.jpg  /  (중) flame02.jpg  /  (우) flameAlpha.png<br>
+<img src="https://github.com/user-attachments/assets/201f103e-06d4-44ea-901b-4a8a81bd5b5b" width="300" height="300"/>
+<img src="https://github.com/user-attachments/assets/9e9b2464-7235-41b0-ad80-234fc2763ed8" width="300" height="300"/>
+<img src="https://github.com/user-attachments/assets/0f505be0-73fe-4cc0-82a0-945cff5649db" width="300" height="300"/>
