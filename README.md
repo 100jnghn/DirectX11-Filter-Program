@@ -1,5 +1,7 @@
 # Filter Program
 - DirectX11을 사용해 제작한 filter 프로그램입니다.
+- README에는 코드 설명, System Flow이 포함되지 않고 저화질 이미지가 나타납니다.
+- 따라서 상세한 프로젝트 설명은 프로젝트 설명서 PDF 파일을 참고해 주세요
  <br>
 
 #### ⬇️ Click IMG to play with youtube ⬇️
