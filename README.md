@@ -63,8 +63,8 @@ applicationclass에서 해당 함수의 true 값을 받으면 m_cubePosX의 값�
 이 값을 Render() 함수에 전달하여 worldMatrix의 x값을 이동시켜 모델 움직임을 구현했습니다.<br>
 <br>
 (좌) 왼쪽으로 이동 / (우) 오른쪽으로 이동<br>
-<img src="https://github.com/user-attachments/assets/4d2f43e2-d12e-4619-a373-c8bcd5e612b1" width="450" height="300"/>
-<img src="https://github.com/user-attachments/assets/6ece9366-4b8e-41b5-acb0-cb16f1652e7f" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/4d2f43e2-d12e-4619-a373-c8bcd5e612b1" width="400" height="300"/>
+<img src="https://github.com/user-attachments/assets/6ece9366-4b8e-41b5-acb0-cb16f1652e7f" width="400" height="300"/>
 <br>
 <br>
 <br>
@@ -79,8 +79,8 @@ Light2는 푸른색을 띄고 ↘방향을 비추도록 Direction을 설정했�
 아래는 Cube가 왼쪽으로 이동하여 우측 면에 붉은 조명이 보이고<br>
 Cube가 오른쪽으로 이동하여 좌측면에 푸른 조명이 보이는 이미지입니다.<br>
 중간 부분은 두 조명이 합쳐져 보라색 색상이 나타납니다.<br>
-<img src="https://github.com/user-attachments/assets/498b9e0c-34e8-4e50-bc95-996974031a6c" width="450" height="300"/>
-<img src="https://github.com/user-attachments/assets/cda26487-b3fa-4273-b8cd-517c0ffd6f15" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/498b9e0c-34e8-4e50-bc95-996974031a6c" width="400" height="300"/>
+<img src="https://github.com/user-attachments/assets/cda26487-b3fa-4273-b8cd-517c0ffd6f15" width="400" height="300"/>
 <br>
 <br>
 <br>
@@ -92,11 +92,11 @@ Refraction Scale은 0.0~0.3 범위로 제한됩니다(기본 0.02).<br>
 또한, 필터를 적용한 상태에서도 모델을 좌우로 움직일 수 있으며 필터 밖으로 벗어난 Cube 모델은 필터의 효과를 받지 않습니다.<br>
 <br>
 (좌) refraction scale = 0.0  /  (중) refraction scale = 0.02(기본)  /  (우) refraction scale = 0.3<br>
-<img src="https://github.com/user-attachments/assets/38526505-1d4e-4af0-953b-b554783dfde7" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/0e050243-b80a-40f1-9fdf-ebf8a8d854ab" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/3787f5ec-88a3-468a-a283-13ec77809e48" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/2b231eae-f668-4c05-a3b1-84f40183e5a4" width="450" height="300"/>
-<img src="https://github.com/user-attachments/assets/bb74f44d-0f06-4cca-bf67-2f060914907f" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/38526505-1d4e-4af0-953b-b554783dfde7" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/0e050243-b80a-40f1-9fdf-ebf8a8d854ab" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/3787f5ec-88a3-468a-a283-13ec77809e48" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/2b231eae-f668-4c05-a3b1-84f40183e5a4" width="400" height="300"/>
+<img src="https://github.com/user-attachments/assets/bb74f44d-0f06-4cca-bf67-2f060914907f" width="400" height="300"/>
 <br>
 <br>
 <br>
@@ -111,20 +111,20 @@ Pixel Shader에서 각 Texture들을 샘플링할 때 y좌표를 감소시킨 �
 상수 버퍼로 전달받은 texture translation 값과의 연산을 통해 용암이 흐르는 듯한 효과를 구현했습니다.<br>
 <br>
 (좌) fire bright = 1.7  /  (중) fire bright = 1.3(기본)  /  (우) fire bright = 0.8<br>
-<img src="https://github.com/user-attachments/assets/5195f8bd-545b-4bdf-b64c-6bcd79f6a3ce" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/57704d79-fa63-4ade-ad5c-d3b4371f0f44" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/5da0412d-b5c4-4f4b-9dbb-cfa98f6737a3" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/786e44f8-7975-4761-b2a4-1c436e1ac8ae" width="450" height="300"/>
-<img src="https://github.com/user-attachments/assets/798420f0-0ae6-42f3-8585-e9df5fdfb8c2" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/5195f8bd-545b-4bdf-b64c-6bcd79f6a3ce" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/57704d79-fa63-4ade-ad5c-d3b4371f0f44" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/5da0412d-b5c4-4f4b-9dbb-cfa98f6737a3" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/786e44f8-7975-4761-b2a4-1c436e1ac8ae" width="400" height="300"/>
+<img src="https://github.com/user-attachments/assets/798420f0-0ae6-42f3-8585-e9df5fdfb8c2" width="400" height="300"/>
 <br>
 <br>
 <br>
 아래는 원본 이미지입니다.<br>
 <br>
 (좌) flame01.jpg  /  (중) flame02.jpg  /  (우) flameAlpha.png<br>
-<img src="https://github.com/user-attachments/assets/201f103e-06d4-44ea-901b-4a8a81bd5b5b" width="300" height="300"/>
-<img src="https://github.com/user-attachments/assets/9e9b2464-7235-41b0-ad80-234fc2763ed8" width="300" height="300"/>
-<img src="https://github.com/user-attachments/assets/0f505be0-73fe-4cc0-82a0-945cff5649db" width="300" height="300"/>
+<img src="https://github.com/user-attachments/assets/201f103e-06d4-44ea-901b-4a8a81bd5b5b" width="200" height="200"/>
+<img src="https://github.com/user-attachments/assets/9e9b2464-7235-41b0-ad80-234fc2763ed8" width="200" height="200"/>
+<img src="https://github.com/user-attachments/assets/0f505be0-73fe-4cc0-82a0-945cff5649db" width="200" height="200"/>
 <br>
 <br>
 <br>
@@ -132,9 +132,9 @@ Pixel Shader에서 각 Texture들을 샘플링할 때 y좌표를 감소시킨 �
 숫자 0을 눌러 현재 적용된 필터를 제거합니다.<br>
 Ice Filter 효과나 Fire Filter 효과가 적용된 상태에서 숫자 0을 누르면 현재 적용된 필터가 제거됩니다.<br>
 아래는 순서대로 숫자1, 숫자2, 숫자0을 누른 후의 모습입니다.<br>
-<img src="https://github.com/user-attachments/assets/0195793c-bfd7-464b-9baf-f913f146dd32" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/34e8f25c-f1d5-4543-8544-ff387797f221" width="300" height="200"/>
-<img src="https://github.com/user-attachments/assets/97938469-b8f1-4e64-807a-48fcb12f8156" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/0195793c-bfd7-464b-9baf-f913f146dd32" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/34e8f25c-f1d5-4543-8544-ff387797f221" width="200" height="150"/>
+<img src="https://github.com/user-attachments/assets/97938469-b8f1-4e64-807a-48fcb12f8156" width="200" height="150"/>
 <br>
 <br>
 <br>
@@ -162,8 +162,8 @@ Filter를 통해 Cube의 색상이 변하더라도 화면 중앙의 Cube는 색�
 또한, 필터를 변경할 땐 원래의 색상으로 돌아간 다음 서서히 색상히 변하도록 하고, 숫자 0을 눌러 Filter를 제거하면 원본 색상을 계속 유지합니다.<br>
 <br>
 (좌) Ice 적용 후 파랗게 변함  /  (우) Fire 적용 후 빨갛게 변함<br>
-<img src="https://github.com/user-attachments/assets/1292078c-c8fe-4ecd-ac36-18b32c991912" width="450" height="300"/>
-<img src="https://github.com/user-attachments/assets/25a48f17-703b-4478-baf1-27fa3eb9cf59" width="450" height="300"/>
+<img src="https://github.com/user-attachments/assets/1292078c-c8fe-4ecd-ac36-18b32c991912" width="400" height="300"/>
+<img src="https://github.com/user-attachments/assets/25a48f17-703b-4478-baf1-27fa3eb9cf59" width="400" height="300"/>
 <br>
 <br>
 각 Filter에서 방향키 ↑↓를 누름으로 필터의 강도를 변경함에 따라 색상 변화 속도 또한 증가하고 감소합니다.<br>
